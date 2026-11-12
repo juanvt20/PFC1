@@ -1,0 +1,25 @@
+# STRONGHOLD – Sección experimental (PFC1)
+
+Archivos generados a partir de los JSON y CSV proporcionados por el usuario.
+
+- Experimentos_Resultados_STRONGHOLD.tex: sección para pegar en Overleaf.
+- figuras/*.pdf: tres figuras vectoriales listas para LaTeX.
+- figuras/*.png: previsualización de las mismas figuras.
+- resumen_experimentos.csv: valores consolidados, con un renglón por ejecución.
+- verificacion_numerica.json: cálculos de las pruebas de ventana 4/8.
+
+## Integración
+1. Agrega `\usepackage{graphicx}` al preámbulo si aún no está.
+2. Sube la carpeta `figuras` a Overleaf sin alterar rutas.
+3. Sustituye el bloque comentado con `Experimentos_Resultados_STRONGHOLD.tex`.
+4. Reemplaza `\cite{sun2022stronghold}` por la clave real del paper de Sun et al. en tu `.bib`.
+5. El texto cubre SOLO la técnica STRONGHOLD; no inventa resultados de LSP-Offload.
+
+## Aspectos experimentales pendientes
+- Una sola ejecución por configuración; el paper original hace 10 repeticiones y media geométrica.
+- El paper original incluye el overhead de perfilado inicial en su throughput; nuestro benchmark
+  excluye 20 o 50 iteraciones de calentamiento y también la inicialización del modelo.
+- No se determinó el máximo modelo entrenable; no atribuir mejoras absolutas del paper a la laptop.
+- WikiText-103 se preparó desde la partición train y se dividió internamente 949,50,1.
+- La ventana 8 tuvo 33/450 iteraciones >1000 ms frente a 1/450 en ventana 4;
+  NO atribuir causalidad sin perfilado.

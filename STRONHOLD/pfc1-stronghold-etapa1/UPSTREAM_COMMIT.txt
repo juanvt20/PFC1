@@ -1,0 +1,5 @@
+https://github.com/xshaun/sc22-ae
+229071a8919a6918323824da93c9011f5fb1bd84
+
+Los archivos de stronghold-original se incluyen sin modificaciones.
+No ejecutar los scripts de entrenamiento sin aislamiento y revisión.

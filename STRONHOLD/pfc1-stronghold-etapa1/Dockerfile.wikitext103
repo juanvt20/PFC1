@@ -1,0 +1,11 @@
+FROM pfc-stronghold:ds058
+
+# Solo utilidades para leer el corpus original y ejecutar el
+# preprocesador de datos incluido en STRONGHOLD/Megatron-LM.
+# No altera el modelo, la tecnica ni los optimizadores de entrenamiento.
+RUN python -m pip install --no-cache-dir \
+    numpy==1.23.5 \
+    pyarrow==17.0.0 \
+    nltk==3.9.1
+
+WORKDIR /work

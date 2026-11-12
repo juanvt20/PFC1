@@ -1,0 +1,13 @@
+# PFC 1 - STRONGHOLD: instala DeepSpeed 0.5.8 sin alterar el codigo original.
+# Reutiliza la imagen con NVIDIA Apex y las extensiones CUDA ya compiladas.
+FROM pfc-stronghold:apex
+
+# Prueba de compatibilidad: las extensiones propias de STRONGHOLD se
+# compilaran y validaran posteriormente, al ejecutar su codigo original.
+ENV DS_BUILD_OPS=0
+
+RUN python -m pip install --no-cache-dir --no-build-isolation \
+    deepspeed==0.5.8 \
+    numpy==1.23.5
+
+WORKDIR /pfc

@@ -1,0 +1,42 @@
+@'
+# Datos y resultados
+**/pfc_data/
+**/resultados/
+**/datasets/
+**/checkpoints/
+
+# Archivos de compilacion
+**/build/
+**/build_*/
+**/__pycache__/
+**/.venv/
+*.so
+*.o
+*.obj
+*.pyc
+*.pyd
+
+# Archivos pesados
+*.bin
+*.idx
+*.npy
+*.npz
+*.parquet
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.jsonl
+
+# Logs y archivos comprimidos
+*.log
+*.zip
+*.tar
+*.gz
+
+# Archivos privados
+.env
+.env.*
+*.pem
+*.key
+'@ | Set-Content -Encoding UTF8 .gitignore

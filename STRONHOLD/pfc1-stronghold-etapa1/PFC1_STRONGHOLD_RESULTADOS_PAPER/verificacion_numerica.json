@@ -1,0 +1,14 @@
+{
+  "w8_iter_median_ms": 358.5,
+  "w4_iter_median_ms": 432.9,
+  "w8_iters_above_1000ms": 33,
+  "w4_iters_above_1000ms": 1,
+  "w8_max_ms": 12646.0,
+  "w4_max_ms": 3137.5,
+  "w8_avg_ms": 554.3166666666667,
+  "w4_avg_ms": 440.9411111111111,
+  "w8_thr": 3.608046,
+  "w4_thr": 4.535753,
+  "percentage_change_throughput_w8_vs_w4": -20.453208100176525,
+  "w8_outlier_fraction": 0.07333333333333333
+}

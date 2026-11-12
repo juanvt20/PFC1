@@ -1,0 +1,14 @@
+# PFC 1 / STRONGHOLD: entorno de diagnóstico, NO entrenamiento todavía.
+# PyTorch 2.7.1 + CUDA 12.8 son necesarios para la GPU RTX 5050 (sm_120).
+FROM pytorch/pytorch:2.7.1-cuda12.8-cudnn9-runtime
+
+# Paquetes enumerados en los requirements.txt del repositorio de los autores.
+# PyTorch ya está fijado por la imagen base. Estos pins son del entorno adaptado,
+# no los del entorno de 2022; se documentarán como diferencias de software.
+RUN python -m pip install --no-cache-dir \
+    regex==2024.11.6 \
+    pybind11==2.13.6 \
+    six==1.17.0 \
+    numpy==1.23.5
+
+WORKDIR /pfc
