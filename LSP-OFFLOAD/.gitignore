@@ -1,0 +1,41 @@
+# Copias de terceros y builds locales; procedencia/patches sí se versionan.
+original/upstream/
+adaptado/upstream/
+**/build/
+**/build_*/
+**/__pycache__/
+*.so
+*.o
+*.obj
+*.pyc
+*.pyd
+.venv/
+
+# Runtime: conservar únicamente el marcador vacío en Git.
+!datasets/
+datasets/*
+!datasets/.gitkeep
+models/*
+!models/.gitkeep
+results/*
+!results/.gitkeep
+logs/*
+!logs/.gitkeep
+metrics/*
+!metrics/.gitkeep
+checkpoints/
+.cache/
+
+# Secretos y archivos pesados.
+.env
+.env.*
+*.pem
+*.key
+*.token
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.parquet
+*.jsonl
