@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "planned_not_executed",
+  "review_date": "2026-11-12",
+  "upstream": {
+    "repository": "https://github.com/gulang2019/LSP-Offload",
+    "commit": "d9dc92a32b7e4829116ba6abec17c280dfb548a4",
+    "tree_sha": "789020101c7d4fc5537cd0822656b7026f8db932"
+  },
+  "target_hardware": {
+    "source": "user_report_not_verified_this_session",
+    "cpu": "Intel Core i7-13700HX",
+    "physical_ram_gb": 16,
+    "gpu": "NVIDIA RTX 5050 Laptop",
+    "vram_gb": 8,
+    "compute_capability": "12.0",
+    "reported_wsl_ram_gib": 7.6,
+    "os": "Windows 11 + WSL2 Ubuntu 22.04.5",
+    "docker_torch": "2.7.1",
+    "docker_cuda": "12.8"
+  },
+  "initial_experiments": [
+    {
+      "id": "C_GLUE_DIAGNOSTIC",
+      "state": "blocked_until_environment_and_numerics_validated",
+      "model": "roberta-base",
+      "dataset": "nyu-mll/glue",
+      "task_options": [
+        "mrpc",
+        "sst2"
+      ],
+      "d": 512,
+      "r": 16,
+      "weights_dtype": "bfloat16",
+      "optimizer_dtype": "float32",
+      "paper_batch": 16,
+      "script_sequence_length": 128,
+      "learning_rate": 0.00005,
+      "projector_threshold": 0.3,
+      "full_glue_reproduction": false,
+      "source": "scripts/run_glue.sh",
+      "notes": [
+        "Short diagnostic is not the one-hour/full-GLUE result",
+        "Original launcher uses cuda:0 optimizer; CPU offload is a separately recorded configuration"
+      ]
+    },
+    {
+      "id": "D_GPT2_ALPACA",
+      "state": "conditional_on_cpu_ram_and_correctness",
+      "model": "gpt2-large",
+      "dataset_file": "datasets/alpaca_gpt4_data.json",
+      "dataset_source": "https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM/blob/main/data/alpaca_gpt4_data.json",
+      "d": 512,
+      "r_candidates": [
+        8,
+        16,
+        32
+      ],
+      "weights_dtype": "bfloat16",
+      "optimizer_dtype": "float32",
+      "script_batch": 4,
+      "script_sequence_length": 512,
+      "learning_rate_lsp": 0.0001,
+      "check_frequency": 1000,
+      "calibration_examples": 16,
+      "projector_common_iterations": 100,
+      "projector_specific_iterations": 0,
+      "projector_learning_rate": 0.1,
+      "source": "scripts/run-gpt2-large.sh",
+      "notes": [
+        "Pin dataset revision/hash before execution",
+        "Paper alpha=0.5 vs CLI default=0.8 unresolved",
+        "Scheduler parameters and Zero flag require explicit validation",
+        "Batch reductions must be documented, not silently applied"
+      ]
+    },
+    {
+      "id": "DEEPSEEK_1_3B",
+      "state": "deferred_conditional",
+      "model": "deepseek-ai/deepseek-coder-1.3b-base",
+      "dataset": "theblackcat102/evol-codealpaca-v1",
+      "d": 1280,
+      "r": 4,
+      "paper_effective_batch": 128,
+      "paper_sequence_length": 1024,
+      "paper_profile_batch": 1,
+      "paper_profile_sequence_length": 384,
+      "notes": [
+        "Published time curves are simulated; do not reuse fixed step times as local measurements",
+        "Original GPU-quality route alone does not validate offloading"
+      ]
+    },
+    {
+      "id": "DEEPSEEK_6_7B",
+      "state": "not_viable_original_route_8gb",
+      "model": "deepseek-ai/deepseek-coder-6.7b-base",
+      "reason": "16-bit model weights alone exceed available VRAM"
+    }
+  ],
+  "required_outputs": [
+    "config.json",
+    "environment.json",
+    "command.txt",
+    "stdout.log",
+    "stderr.log",
+    "samples.csv",
+    "steps.csv",
+    "evaluations.csv",
+    "summary.json",
+    "trace_when_profiling",
+    "full_checkpoint_when_resuming"
+  ],
+  "training_results_available": false,
+  "algorithm_patches_applied": false,
+  "laptop_docker_access": false
+}
