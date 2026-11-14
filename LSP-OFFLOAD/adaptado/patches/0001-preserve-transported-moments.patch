@@ -1,0 +1,35 @@
+--- a/gradient_compressor.py
++++ b/gradient_compressor.py
+@@ -435,7 +435,8 @@
+                         module.optim.m.nan_to_num_(nan=0.0, posinf = 1.0, neginf = -1.0)
+                         module.optim.v.nan_to_num_(nan=0.0, posinf = 1.0)
+                 module._grad = None 
+-                module.init(self.sketch_size, self.sketch_size)
++                module.init(self.sketch_size, self.sketch_size,
++                            preserve_optimizer_state=module.inited)
+             
+         print('Finish learn sketching')
+         tot_mem = sum([u.n_storage() + v.n_storage() for u, v in self.sketches_map.values()])
+--- a/para_offload_modules.py
++++ b/para_offload_modules.py
+@@ -245,9 +245,18 @@
+             return torch.empty(size, device = self.offloading_device, dtype = self.optim_dtype, pin_memory=True)
+         return old_buffer
+     
+-    def init(self, left_compress_size, right_compress_size):
++    def init(self, left_compress_size, right_compress_size, preserve_optimizer_state=False):
++        if preserve_optimizer_state:
++            assert self.inited
++            shape = (left_compress_size, right_compress_size)
++            assert self.optim.m.shape == self.optim.v.shape == shape
++            # fit has already transported M/V; only restore their execution device.
++            self.optim.m = self.optim.m.to(self.offloading_device).contiguous()
++            self.optim.v = self.optim.v.to(self.offloading_device).contiguous()
++            self.current_device = self.offloading_device
++        else:
++            self.optim.init((left_compress_size, right_compress_size))
+         self.inited = True
+-        self.optim.init((left_compress_size, right_compress_size))
+         if self.offloading_device.__str__() == self.compute_device.__str__():
+             return
+         self.left_compress_size = left_compress_size

@@ -1,0 +1,9 @@
+{
+  "commit": "d9dc92a32b7e4829116ba6abec17c280dfb548a4",
+  "expected_commit": "d9dc92a32b7e4829116ba6abec17c280dfb548a4",
+  "files": 99,
+  "byte_mismatches": [],
+  "object_mismatches": [],
+  "eol_only": [],
+  "git_diff_content_empty": true
+}

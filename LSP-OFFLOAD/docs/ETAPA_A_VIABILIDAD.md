@@ -2,9 +2,29 @@
 
 Fecha: 12 de noviembre de 2026. Proyecto: «Evaluación y Adaptación de Estrategias de Paralelización para el Entrenamiento de Modelos de Lenguaje en Entornos de Recursos Limitados».
 
+**Actualización de la revisión local:** los tres PDF de `referencias/` ya
+fueron extraídos por página; fórmulas, tablas y figuras relevantes fueron
+inspeccionadas. [CONTRASTE_PDF_CODIGO.md](CONTRASTE_PDF_CODIGO.md) completa
+y corrige esta evaluación con páginas y funciones. Hay acceso local a
+disco/Git/Docker/GPU y una imagen independiente con extensión compilada e
+imports básicos probados: [VALIDACION_LOCAL.md](VALIDACION_LOCAL.md).
+La limitación histórica de acceso de §6 ya no describe el estado actual.
+**Nuevo bloqueo N15:** el transporte de momentos se pierde por su posterior
+reinicio; la lectura estática anterior no lo había identificado. No hay
+entrenamiento ni validación de calidad. El resto del documento conserva
+el contexto y las estimaciones de Etapa A, salvo las precisiones siguientes.
+
+Correcciones: no se presume wall-clock bruto tampoco para las gráficas
+Alpaca, cuyos scripts reconstruyen tiempo. El paper tiene una ambigüedad
+interna de regularización entre ecuación(3) y Algoritmo1. La atribución
+OPT-1.3B/6.7B en Tabla I del PFC no coincide con los modelos nombrados en
+el paper LSP. El uso de CheckFreq=1000/Adam no hereda automáticamente el
+teorema que analiza otro régimen. Ninguna de estas diferencias se corrigió
+silenciosamente en código.
+
 ## Dictamen y alcance de la evidencia
 
-**Es razonable comenzar una reproducción parcial y fiel con el hardware actual. No está demostrada todavía su ejecución en la RTX 5050.** Los objetivos iniciales son RoBERTa-base/GLUE para calidad y GPT-2 Large/Alpaca para la ruta completa CPU-GPU. No hace falta asumir una ampliación de RAM o SSD para comenzar. El pico de calibración, la memoria fijada de WSL2 y la corrección de la extensión son las principales condiciones de avance.
+**Es razonable preparar una reproducción parcial con el hardware actual. No está demostrado todavía el fine-tuning completo y fiel en la RTX 5050.** Se mantienen RoBERTa-base/GLUE y GPT-2 Large/Alpaca como objetivos. La extensión y la transferencia fijada pequeña ya se probaron; calibración, concurrencia y corrección del algoritmo (incluido N15) siguen condicionando el avance.
 
 Se revisó el PDF adjunto de LSP-Offload de 13 páginas, incluido el apéndice; el PFC adjunto para situar la metodología; el árbol completo del upstream y sus fuentes Python, C++/CUDA y shell; y la estructura de PFC1. Se inspeccionaron los mecanismos de compresión, recalibración, actualización de momentos, autograd, planificación, datos, evaluación, guardado y gráficas. La revisión estática no demuestra la corrección ni el rendimiento en ejecución.
 
@@ -27,6 +47,12 @@ En el código principal, `gradient_compressor.py` implementa `LearnedCountSketch
 ## 2. Experimentos originales y correspondencia con el código
 
 Los números de memoria y presupuestos de esta sección pertenecen a los autores, salvo donde se indique expresamente «estimación». No son mediciones de esta laptop.
+
+La [matriz de experimentos](MATRIZ_EXPERIMENTOS.md) precisa esta evaluación
+con métricas, unidades, protocolos, archivos de medición y estado real de
+los recolectores. Distingue candidatos, memoria pendiente de comprobar,
+imposibilidad por capacidad y falta de protocolo. HumanEval sigue sin
+harness identificado; ningún entrenamiento ha sido validado localmente.
 
 | Evaluación | Modelos y datos | Configuración principal publicada | Hardware original / naturaleza | Viabilidad inicial |
 | --- | --- | --- | --- | --- |
@@ -77,7 +103,7 @@ PyTorch documenta soporte Blackwell y binarios CUDA12.8 desde 2.7. Esto respalda
 
 ## 4. Presupuesto de memoria y CPU
 
-Las especificaciones de la Lenovo son las comunicadas por el usuario: i7-13700HX, 16 núcleos/24 hilos, RTX5050 Laptop de 8 GB, capacidad12.0, RAM física16 GB y WSL2 con unos7.6 GiB en pruebas anteriores. No se midieron desde esta sesión. Los 300 GB de disco son capacidad de almacenamiento, no memoria para estados del optimizador.
+Las especificaciones iniciales fueron comunicadas por el usuario. Ahora se verificaron i7-13700HX, 24 CPU lógicas expuestas, AVX2, RTX5050 Laptop, capacidad12.0, VRAM total7.96GiB y RAM visible Linux7.61GiB. Las instantáneas de memoria libre están en VALIDACION_LOCAL.md. Los 16GB físicos nominales y 300GB de almacenamiento son contexto inicial; disco no es memoria de optimizador. No se deducen 16 núcleos físicos del conteo lógico del contenedor.
 
 LSP-Offload conserva los pesos base en GPU durante el entrenamiento. No es un sistema que permita guardar arbitrariamente pesos de un modelo 6.7B en SSD para hacerlo caber en 8 GB sin cambiar su ruta original. La calibración también mueve el modelo completo a CPU y conserva gradientes completos float32; por tanto, no basta con estimar el estado comprimido.
 
@@ -97,7 +123,7 @@ La RAM de calibración puede ser mucho mayor: `_grad` se guarda en CPU float32 p
 
 Los proyectores se almacenan como índices/valores, pero `get_sketch()` materializa matrices densas transitorias. No debe extrapolarse únicamente el coste disperso teórico. La recalibración puede mover momentos a GPU y elevar su pico.
 
-La CPU i7 debe soportar la vía AVX2/OpenMP, pendiente de comprobar flags y cuotas efectivas de WSL/contenedor. El código usa por defecto14 hilos intra-op y2 inter-op: se registrarán y evaluará su contención con OpenMP en el equipo real. Tener24 hilos lógicos no garantiza rendimiento equivalente a Threadripper ni el ancho de banda PCIe publicado. Se medirán las dos direcciones y el solapamiento con buffers fijados, sin asumir10-20 GB/s del paper.
+Se comprobaron AVX2, compilación OpenMP y 24 CPU lógicas expuestas, con cpu.max=max 100000. El entrenador configura14 hilos intra-op y2 inter-op. El diagnóstico independiente usó2 intra-op por OMP y12 inter-op por defecto de PyTorch, sin ejecutar el bloque principal del entrenador. No es una comparación de rendimiento. Se medirán ancho de banda y solapamiento sin asumir10-20 GB/s del paper.
 
 No se prevé descargar toda la colección de modelos ni guardar un checkpoint por iteración. Debe establecerse una política de retención antes de entrenar; en esta etapa no se borró ningún resultado ni se cambió la RAM asignada a WSL.
 
@@ -106,7 +132,7 @@ No se prevé descargar toda la colección de modelos ni guardar un checkpoint po
 | Etapa | Acción concreta | Evidencia para avanzar |
 | --- | --- | --- |
 | A: completada documentalmente | Fijar commit, mapa paper/código, memoria, incompatibilidades y protocolo | Manifiesto y revisión de fuentes; ninguna afirmación de entrenamiento |
-| B: pendiente en laptop | Contenedor exclusivo con PyTorch2.7.1/CUDA12.8 de desarrollo; importar dependencias; reconstruir extensión; medir capacidad real | Inventario de sistema, imagen/digest, lock, build log, kernel CPU/GPU y transferencia fijada |
+| B: entorno preparado; validación integral pendiente | Imagen exclusiva PyTorch2.7.1/CUDA12.8, imports y extensión sm_120 comprobados | Inventario, imagen/digest, versiones fijadas, build log, kernel float32 y transferencia fijada pequeña; faltan calibración y concurrencia completas |
 | C1 | Validar kernel fusionado y transformación de momentos con tensores pequeños; validar compresor original sin sustituirlo | Errores absolutos/relativos y criterio explícito; CPU/GPU epsilon discrepante resuelto documentalmente |
 | C2 | RoBERTa + MRPC o SST-2 de GLUE como diagnóstico corto; luego MNLI original si cabe | Pérdidas finitas, aprendizaje de valores de proyectores, recalibración y persistencia; no llamar a este diagnóstico Tabla3 completa |
 | C3 | Comparar versión serial y planificador original FCFS/LCFS sobre mismos pesos, datos y proyectores | Actualización antes de forward, sin actualizaciones perdidas; trazas de streams y diferencias numéricas acotadas |
@@ -118,11 +144,11 @@ Para GPT-2 se intentará batch4 y longitud512 del lanzador. Si el diagnóstico O
 
 La primera validación GLUE con `--offload cuda:0` conserva el lanzador del autor pero **no cierra la validación del sistema**. Una prueba posterior con `--offload cpu` se registrará como adaptación de configuración. Los experimentos completos se habilitarán únicamente después de resolver los bloqueos científicos de COMPATIBILIDAD.md.
 
-## 6. Límites pendientes y acceso que falta
+## 6. Acceso actual y validación que falta
 
-Se puede trabajar directamente sobre GitHub; no se dispone de un canal hacia `C:\PFC1`, la distribución Ubuntu de WSL2, Docker Desktop ni la RTX5050 de la laptop. El entorno de revisión no expone Docker CLI ni `nvidia-smi`. Falta ejecutar el diagnóstico dentro de esa laptop o conectar explícitamente un entorno de ejecución con su carpeta, Docker y GPU. Acceso de escritura GitHub no proporciona acceso a esos recursos.
+Hay acceso autorizado a `C:\PFC1`, Git, Docker Desktop por ruta absoluta y GPU desde contenedor. WSL/Docker requieren ejecución fuera del sandbox. Los PDF locales se extrajeron y sus elementos relevantes se inspeccionaron visualmente. La falta de acceso indicada en la revisión estática anterior ya no aplica; véanse VALIDACION_LOCAL.md y HERRAMIENTAS_PDF.md.
 
-Por ello no se puede afirmar aún una combinación final de versiones Transformers/extensión, que cabe un batch concreto, el consumo real de RAM, velocidad, calidad o solapamiento. La conclusión es una evaluación de viabilidad fundada y un orden de pruebas, no una reproducción experimental completada.
+Se dispone de una combinación local compilada con Transformers4.44.2 y extensión original, con pruebas básicas satisfactorias. Aún no se ha demostrado un batch de entrenamiento viable, sus picos de RAM/VRAM, velocidad, calidad o solapamiento. N15 se reprodujo y debe resolverse antes de aceptar una reproducción fiel. Preparar el entorno no demuestra corrección integral ni reproducción experimental completada.
 
 ## Fuentes
 

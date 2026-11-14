@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "planned_not_executed",
+  "status": "adaptation_prepared_scheduler_boundary_blocked",
   "review_date": "2026-11-12",
   "upstream": {
     "repository": "https://github.com/gulang2019/LSP-Offload",
@@ -8,7 +8,7 @@
     "tree_sha": "789020101c7d4fc5537cd0822656b7026f8db932"
   },
   "target_hardware": {
-    "source": "user_report_not_verified_this_session",
+    "source": "mixed_provenance_see_docs_VALIDACION_LOCAL",
     "cpu": "Intel Core i7-13700HX",
     "physical_ram_gb": 16,
     "gpu": "NVIDIA RTX 5050 Laptop",
@@ -17,7 +17,21 @@
     "reported_wsl_ram_gib": 7.6,
     "os": "Windows 11 + WSL2 Ubuntu 22.04.5",
     "docker_torch": "2.7.1",
-    "docker_cuda": "12.8"
+    "docker_cuda": "12.8",
+    "verified_fields": [
+      "cpu exact model",
+      "24 exposed logical CPUs",
+      "avx2",
+      "gpu",
+      "compute_capability",
+      "docker_torch",
+      "docker_cuda"
+    ],
+    "unverified_or_historical_fields": [
+      "16 physical CPU cores",
+      "OS distribution version",
+      "physical RAM nominal capacity"
+    ]
   },
   "initial_experiments": [
     {
@@ -35,7 +49,7 @@
       "optimizer_dtype": "float32",
       "paper_batch": 16,
       "script_sequence_length": 128,
-      "learning_rate": 0.00005,
+      "learning_rate": 5e-05,
       "projector_threshold": 0.3,
       "full_glue_reproduction": false,
       "source": "scripts/run_glue.sh",
@@ -111,6 +125,10 @@
     "full_checkpoint_when_resuming"
   ],
   "training_results_available": false,
-  "algorithm_patches_applied": false,
-  "laptop_docker_access": false
+  "algorithm_patches_applied": true,
+  "laptop_docker_access": true,
+  "local_validation_record": "configs/environment_validation.json",
+  "pdf_code_comparison": "docs/CONTRASTE_PDF_CODIGO.md",
+  "new_scientific_blocker": "N14: Scheduler.clear discards pending updates at evaluation and exit",
+  "adaptation_validation_record": "configs/adaptation_validation.json"
 }

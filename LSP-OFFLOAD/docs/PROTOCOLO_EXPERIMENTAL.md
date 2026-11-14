@@ -1,6 +1,15 @@
 # Protocolo previsto: mediciones y reproducibilidad
 
-Estado: diseñado, no ejecutado. Las cifras de rendimiento permanecerán vacías hasta medir en la laptop. No se han producido gráficas ni resultados propios en Etapa A.
+Estado: protocolo de entrenamiento diseñado, todavía sin entrenamiento. Ya se ejecutaron diagnósticos pequeños del entorno/kernel/compresor descritos en VALIDACION_LOCAL.md; no son resultados de fine-tuning ni mediciones de throughput. Las cifras de entrenamiento permanecerán vacías hasta cumplir los criterios siguientes, incluido resolver N15.
+
+La [matriz de experimentos](MATRIZ_EXPERIMENTOS.md) concreta por tabla/figura
+las métricas originales, unidades, baselines, protocolo conocido, carencias
+y archivos de salida. Prevalece sobre las descripciones generales de esta
+sección cuando precisa una definición. Los recolectores de experimentos
+siguen pendientes; los archivos de las tablas son contratos, no resultados.
+Las salidas `paper/`, `diagnostics/` y, si se habilita, `simulation/` se
+mantendrán separadas dentro de cada ejecución. Los nombres generales de
+artefactos siguientes se especializan por experimento en esa matriz.
 
 ## Condiciones de aceptación
 
@@ -40,9 +49,9 @@ El monitor y el resumen deben guardar salida también ante excepción u OOM cuan
 | GPU | Máximos allocated/reserved de PyTorch y memoria de dispositivo consultable; son medidas distintas |
 | RAM | RSS del proceso/árbol, cgroup y MemAvailable WSL; buffers fijados y swap cuando medibles. No sumar dos veces procesos compartidos |
 | Comunicación | Bytes D2H/H2D reales, tiempo por dirección, esperas y traza de solapamiento; ancho de banda con unidades definidas |
-| GLUE | MNLI/SST2/QNLI: accuracy; CoLA: Matthews; MRPC/QQP: accuracy y F1; STS-B: Pearson y Spearman. Guardar todos los campos que devuelve el evaluador |
-| Alpaca | Perplexity y pérdida de evaluación con el mismo split/collator; menor es mejor. No llamar accuracy a perplexity |
-| Código | Loss y HumanEval multilenguaje solo con harness y protocolo fijados; no inferir pass@k del nombre de la tabla |
+| GLUE | Guardar todos los campos y el escalar original: accuracy en MNLI/SST2/QNLI, Matthews en CoLA, media accuracy/F1 en MRPC/QQP y media Pearson/Spearman en STS-B según código. No reconstruir el Avg publicado con la columna SST2 duplicada |
+| Alpaca | Métrica original: perplexity adimensional; `calculate_ppl` usa exp(media de pérdidas por lote). Conservar ese valor y su definición; NLL ponderada por tokens o respuestas solamente sería otra métrica adicional. La pérdida de evaluación desglosada es auxiliar |
+| Código | Fig.5c/d usa Train Loss frente a horas simuladas. Tabla4 usa evaluation accuracy multilenguaje sin protocolo suficiente para identificar pass@k. Harness/evaluador faltantes; no sustituir por loss ni inventar generación o promedio |
 | Compresor | Error relativo en calibración y validación, tiempo de fit, veces que se recalibra y dimensión efectiva |
 
 Primero se comparan rutas al mismo modelo, datos, secuencia, precisión y batch viable. Se informará aparte el mayor batch que cabe en cada método. Para calidad, comparar presupuesto de tiempo y pasos/tokens; los LR de los autores pueden diferir por método y deben declararse.

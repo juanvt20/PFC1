@@ -1,4 +1,8 @@
 # Copias de terceros y builds locales; procedencia/patches sí se versionan.
+referencias/
+.venv-pdf/
+.venv-pdf-linux/
+tools/pdf_output/
 original/upstream/
 adaptado/upstream/
 **/build/

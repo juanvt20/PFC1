@@ -1,0 +1,12 @@
+**
+!docker/
+!docker/Dockerfile
+!docker/requirements.txt
+!docker/constraints.txt
+!original/
+!original/upstream/
+!original/upstream/kernels/
+!original/upstream/kernels/setup.py
+!original/upstream/kernels/fusedAdam.cpp
+!original/upstream/kernels/fusedAdam_cpu.cpp
+!original/upstream/kernels/fusedAdam_cuda.cu
