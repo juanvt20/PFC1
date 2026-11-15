@@ -332,3 +332,61 @@ Git coinciden, sin discrepancias de bytes ni de finales de línea. El diff
 de STRONHOLD está vacío. No se modifica core.autocrlf; las advertencias de
 Git sobre archivos propios no implican cambios del upstream. PDF, entornos,
 modelos, datos y resultados pesados siguen excluidos.
+
+## Experimento principal autorizado: main-v1
+
+`configs/main_experiment_v1.json` fija el experimento de5000 pasos por método,
+GPT2 Medium, mismo checkpoint/split/tokenizador/batch4/longitud512/semilla2026.
+LR1e-4 en ambas rutas conserva el perfil del script: difiere de Zero LR1e-5
+del paper (p.11, “Instruction Fine-tuning on Alpaca”). Se mantienen d512/r8,
+umbral0.8 y las diferencias numéricas ya documentadas. No se cambia ningún
+archivo del algoritmo validado. Los seis microbenchmarks y ambos pilotos se
+reutilizan, sin nuevas descargas/instalaciones/compilaciones.
+
+La evaluación inicial común se realiza una vez con el checkpoint inicial y
+el forward adaptado, antes de inicializar estados de entrenamiento. Cada ruta
+se inicia después desde esos mismos pesos. Se evalúan los5185 ejemplos en
+pasos1000/2000/3000/4000/5000; el último punto es también la evaluación final.
+LSP comprueba proyectores cada1000 pasos. Los primeros cinco pasos se etiquetan
+como calentamiento dentro de los5000, sin pasos adicionales. Los intervalos
+de entrenamiento incluyen el drain final y excluyen calibración/evaluación;
+se conservan además tiempo total, duración por paso y recursos muestreados.
+
+Tras guardar configuración y código en Git, el lanzamiento es:
+
+```powershell
+& ./LSP-OFFLOAD/tools/launch_main.ps1
+```
+
+Se crea únicamente `pfc-lsp-scheduler-v3-main-v1`, un contenedor Docker
+desacoplado con el coordinador Python dentro. Continúa independientemente de
+la sesión de Codex mientras Docker y el equipo sigan funcionando. No altera
+RAM/swap ni imágenes existentes. El coordinador ejecuta initial→zero→lsp y
+el informe, guarda snapshots de configuración/scripts y registra el commit
+exacto en `results/scheduler-v3-main-v1/launch.json`. Un nombre de contenedor
+existente o un directorio de campaña existente impide un segundo lanzamiento.
+
+Consulta de estado, sin iniciar ni repetir trabajo:
+
+```powershell
+& ./LSP-OFFLOAD/tools/status_main.ps1
+Get-Content LSP-OFFLOAD/results/scheduler-v3-main-v1/status.json
+Get-Content LSP-OFFLOAD/results/scheduler-v3-main-v1/zero/progress.json
+Get-Content LSP-OFFLOAD/results/scheduler-v3-main-v1/lsp/progress.json
+```
+
+`initial.log`, `zero.log`, `lsp.log`, los CSV por paso/recurso/evaluación,
+resúmenes incrementales y `*-command.json` quedan dentro de esa campaña.
+Los JSON de estado se sustituyen atómicamente. Ante fallo se conservan los
+archivos y se detiene la secuencia, sin reintento ni reanudación automática.
+Los pesos finales son un artefacto de evaluación; no incluyen un estado de
+reanudación completa validado (momentos, proyectores, RNG, cursor y scheduler).
+
+Al acabar, `report/` contiene tablas CSV/JSON, figuras PDF/PNG y
+`results_ieee.tex`, una sección para incluir en un documento IEEEtran con
+graphicx. El generador usa exclusivamente tiempos y evaluaciones reales,
+sin suavizar pérdidas ni convertir variación de una curva en dispersión
+entre ejecuciones. Si hay fallo, el informe se rotula parcial y muestra
+solo los puntos disponibles. La sección LaTeX se entrega como fragmento,
+sin afirmar compilación del documento IEEE completo. Una trayectoria por
+método y5000 pasos no demuestran convergencia completa.

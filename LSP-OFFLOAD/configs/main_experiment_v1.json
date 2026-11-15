@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "config_version": "main-v1",
+  "campaign": "scheduler-v3-main-v1",
+  "code_base_commit": "7a57c3bd147a9e97c3ff850f8f035528ccef31ac",
+  "image": "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006",
+  "model": "gpt2-medium",
+  "steps_per_method": 5000,
+  "method_order": [
+    "initial",
+    "zero",
+    "lsp"
+  ],
+  "model_asset": {
+    "repository": "openai-community/gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+    "snapshot": "models/hf-cache/models--openai-community--gpt2-medium/snapshots/6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+    "files": {
+      "config.json": {
+        "sha256": "ef1a44d889ad1a0acc7731c78134f1b87d2d222f110e97dd10fd4117331caf22",
+        "bytes": 718
+      },
+      "generation_config.json": {
+        "sha256": "b90eadacf585a743a30ea51e8b5c88b8d282a2a34dc0c7e556d0987cdbd68805",
+        "bytes": 124
+      },
+      "merges.txt": {
+        "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+        "bytes": 456318
+      },
+      "model.safetensors": {
+        "sha256": "fc5a354a19255ad494f3d71549390baca1ccf61d1d822b9408971705c687c9cd",
+        "bytes": 1519984962
+      },
+      "tokenizer.json": {
+        "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+        "bytes": 1355256
+      },
+      "tokenizer_config.json": {
+        "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+        "bytes": 26
+      },
+      "vocab.json": {
+        "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783",
+        "bytes": 1042301
+      }
+    }
+  },
+  "dataset_asset": {
+    "repository": "Instruction-Tuning-with-GPT-4/GPT-4-LLM",
+    "revision": "80cda626ea305004be42426671c66efebbf22144",
+    "url": "https://raw.githubusercontent.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM/80cda626ea305004be42426671c66efebbf22144/data/alpaca_gpt4_data.json",
+    "path": "datasets/alpaca_gpt4_data.json",
+    "sha256": "0bd4f62585d494b794deb043ce0baddfec02f27696857c57c9c238d6eff35a18",
+    "examples": 52002
+  },
+  "common": {
+    "batch": 4,
+    "max_sequence_length": 512,
+    "weights_dtype": "bfloat16",
+    "optimizer_dtype": "float32",
+    "optimizer": "upstream CPU fused Adam",
+    "epsilon": 0.0001,
+    "learning_rate": 0.0001,
+    "l2_reg": 0.0,
+    "checkpointing": true,
+    "input_activation_grad_hook": true,
+    "seed": 2026
+  },
+  "split": {
+    "train": [
+      0,
+      46801
+    ],
+    "calibration": [
+      46801,
+      46817
+    ],
+    "evaluation": [
+      46817,
+      52002
+    ]
+  },
+  "evaluation_frequency": 1000,
+  "evaluation_examples": 5185,
+  "evaluation_initial": "one shared evaluation of the same adapted forward and frozen initial checkpoint before either method",
+  "evaluation_definition": "upstream calculate_ppl unchanged: exp(mean(batch loss)), labels=input_ids, prompt and padding semantics unchanged",
+  "evaluation_final": "step5000 evaluation is also final, no duplicate",
+  "tokenizer": {
+    "source": "same pinned model snapshot",
+    "use_fast": true,
+    "pad_token": "eos_token",
+    "padding": "longest",
+    "pad_to_multiple_of": 8,
+    "truncation": true
+  },
+  "cpu_threads": 14,
+  "interop_threads": 2,
+  "modules": [
+    "attn.qkv",
+    "attn.o",
+    "mlp.up",
+    "mlp.down"
+  ],
+  "offload": "cpu",
+  "use_lora": false,
+  "lora_rank": null,
+  "expected_trainable_parameters": 301989888,
+  "expected_total_parameters": 354823168,
+  "expected_offload_matrices": 96,
+  "methods": {
+    "zero": {
+      "scheduler": {
+        "zero": true,
+        "fcfs_point": 32,
+        "fcfs_process_delay": 1,
+        "fcfs_h2d_delay": 2,
+        "fcfs_upd_delay": 2,
+        "lcfs_d2h_delay": 1000,
+        "lcfs_process_delay": 2,
+        "lcfs_h2d_delay": 1
+      },
+      "compressor": "identity"
+    },
+    "lsp": {
+      "scheduler": {
+        "zero": false,
+        "fcfs_point": 32,
+        "fcfs_process_delay": 1,
+        "fcfs_h2d_delay": 2,
+        "fcfs_upd_delay": 2,
+        "lcfs_d2h_delay": 1000,
+        "lcfs_process_delay": 2,
+        "lcfs_h2d_delay": 1
+      },
+      "compressor": "LearnedCountSketchCompressor",
+      "d": 512,
+      "r": 8,
+      "check_frequency": 1000,
+      "n_iter": 100,
+      "n_ft_iter": 0,
+      "lr": 0.1,
+      "ft_lr": 0.1,
+      "cs_init": "gaussian",
+      "thresh_hold": 0.8,
+      "reuse_sketch": false
+    }
+  },
+  "reporting": {
+    "first_steps_tagged_warmup": 5,
+    "extra_warmup_steps": 0,
+    "resource_sample_seconds": 1,
+    "progress_every_steps": 25,
+    "evaluation_batch_logging": true,
+    "save_final_weights": true
+  },
+  "resume": {
+    "supported": false,
+    "automatic_retry": false,
+    "final_weights_are_not_complete_training_state": true
+  },
+  "estimate": {
+    "combined_hours": 2.7682457331230284,
+    "planning_budget_hours": 4.5,
+    "not_a_timeout": true
+  },
+  "reuse": {
+    "pilot_gate": "results/scheduler-v3-pilot-gate.json",
+    "summary": "configs/comparison_summary.json",
+    "performance_runs": [
+      "scheduler-v3-performance-gpt2-medium-zero-1",
+      "scheduler-v3-performance-gpt2-medium-zero-2",
+      "scheduler-v3-performance-gpt2-medium-zero-3",
+      "scheduler-v3-performance-gpt2-medium-lsp-1",
+      "scheduler-v3-performance-gpt2-medium-lsp-2",
+      "scheduler-v3-performance-gpt2-medium-lsp-3"
+    ]
+  },
+  "differences_from_paper": [
+    {
+      "topic": "model",
+      "local": "GPT2 Medium 354823168 parameters after measured Large Zero OOM",
+      "paper": "GPT2-774M / GPT2 Large, Fig.5a p.7"
+    },
+    {
+      "topic": "LR",
+      "local": "1e-4 for both routes, scripts/run-gpt2-large.sh profile",
+      "paper": "Zero 1e-5, p.11 Instruction Fine-tuning on Alpaca; no silent LR correction"
+    },
+    {
+      "topic": "projector_threshold",
+      "local": 0.8,
+      "paper": 0.5,
+      "reference": "docs/CONTRASTE_PDF_CODIGO.md N05"
+    },
+    {
+      "topic": "algorithm_adaptation",
+      "local": "authorized moment-preservation and scheduler boundary/dependency patches, input activation grad hook for checkpointing",
+      "reference": "adaptado/patches/0001-preserve-transported-moments.patch and 0002-drain-pending-operations.patch"
+    },
+    {
+      "topic": "schedule",
+      "local": "explicit Zero flag and LSP FCFS/LCFS delays; scripts default flags are ambiguous",
+      "reference": "N06; Algorithm3 p.11"
+    },
+    {
+      "topic": "other_unmodified_differences",
+      "local": "CPU epsilon placement, Gaussian sampling with replacement/scatter collisions, no projector regularization added, first fit random; no formula changes",
+      "reference": "docs/CONTRASTE_PDF_CODIGO.md N01-N04"
+    },
+    {
+      "topic": "measurement",
+      "local": "real clocks include separately recorded calibration/evaluation; local seed2026, one trajectory per method",
+      "paper": "Fig.5a plotting code reconstructs time; not reused"
+    }
+  ],
+  "immutable_reference_hashes": {
+    "adaptado/upstream/para_offload_modules.py": "d423634578e0c77e7a2f3507d03bfc60136a394254ac62340dc95615b652f1cc",
+    "adaptado/upstream/gradient_compressor.py": "f4691bbf41fbb48b528a92fa3bbd809d3c4e2a65424c08507f0dc9b51f34d493",
+    "adaptado/upstream/llm_finetuning.py": "f3f5f88954afed314891a8ebf5919c418f209ea6c64b4001a3e0288f1b0d3f28",
+    "adaptado/patches/0001-preserve-transported-moments.patch": "000be9e6a421792589261caed883cfc3199131b392f6c49f2123bc134f97de42",
+    "adaptado/patches/0002-drain-pending-operations.patch": "966e7327cc5b49c9b32e49ff1040a3801d501944625740652c8db25fabbdd7ce",
+    "tools/run_pilot.py": "9227cc1e6dfea4cce18b0edf1cb3975985ddb6afbc3f36c1fddf7c210513ecfd"
+  }
+}
