@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "adaptation_prepared_scheduler_boundary_blocked",
+  "status": "medium_pilots_passed_short_comparison_ready",
   "review_date": "2026-11-12",
   "upstream": {
     "repository": "https://github.com/gulang2019/LSP-Offload",
@@ -124,11 +124,14 @@
     "trace_when_profiling",
     "full_checkpoint_when_resuming"
   ],
-  "training_results_available": false,
+  "training_results_available": true,
   "algorithm_patches_applied": true,
   "laptop_docker_access": true,
   "local_validation_record": "configs/environment_validation.json",
   "pdf_code_comparison": "docs/CONTRASTE_PDF_CODIGO.md",
-  "new_scientific_blocker": "N14: Scheduler.clear discards pending updates at evaluation and exit",
-  "adaptation_validation_record": "configs/adaptation_validation.json"
+  "new_scientific_blocker": null,
+  "adaptation_validation_record": "configs/adaptation_validation.json",
+  "short_comparison_config": "configs/short_comparison.json",
+  "current_execution_scope": "GPT2 Alpaca only; do not expand to other families",
+  "oom_fallback": "Large Zero OOM; both Medium pilots passed 100 steps, real LSP recalibration"
 }

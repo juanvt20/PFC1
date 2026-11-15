@@ -1,8 +1,9 @@
-"""Rebuild an ignored copy and the sole authorized N15 patch from raw blobs."""
+"""Rebuild an ignored copy and the separate authorized patches from raw blobs."""
 import difflib
 import hashlib
 import json
 from pathlib import Path
+from scheduler_patch import apply_scheduler_patch
 
 root = Path(__file__).resolve().parents[1]
 source = root / 'original/upstream'
@@ -43,27 +44,32 @@ new = (b'    def init(self, left_compress_size, right_compress_size, preserve_op
 assert modified[filename].count(old) == 1
 modified[filename] = modified[filename].replace(old, new)
 
-# Never overwrite a changed adapted copy. A byte-identical rebuild is safe.
+stage_one = dict(modified)
+modified = apply_scheduler_patch(stage_one)
+
+# Only upgrade recognized patch-1 bytes, never overwrite unrelated local edits.
 if target.exists():
     for path, raw in modified.items():
         dst = target / path
-        if dst.exists() and dst.read_bytes() != raw:
+        if dst.exists() and dst.read_bytes() not in (raw, stage_one[path]):
             raise RuntimeError('Existing adapted file differs; inspect before continuing: ' + path)
 
-patch = ''
 changed = []
 for path, raw in modified.items():
     dst = target / path
     dst.parent.mkdir(parents=True, exist_ok=True)
-    if not dst.exists():
+    if not dst.exists() or dst.read_bytes() != raw:
         dst.write_bytes(raw)
     if raw != originals[path]:
         changed.append(path)
-        patch += ''.join(difflib.unified_diff(originals[path].decode('utf-8').splitlines(keepends=True),
-                       raw.decode('utf-8').splitlines(keepends=True),
-                       fromfile='a/' + path, tofile='b/' + path))
 patchdir = root / 'adaptado/patches'
 patchdir.mkdir(exist_ok=True)
-(patchdir / '0001-preserve-transported-moments.patch').write_bytes(patch.encode('utf-8'))
+for patchname, before, after in [
+        ('0001-preserve-transported-moments.patch', originals, stage_one),
+        ('0002-drain-pending-operations.patch', stage_one, modified)]:
+    patch = ''.join(''.join(difflib.unified_diff(before[p].decode('utf-8').splitlines(keepends=True),
+                  after[p].decode('utf-8').splitlines(keepends=True), fromfile='a/'+p, tofile='b/'+p))
+                  for p in before if before[p] != after[p])
+    (patchdir / patchname).write_bytes(patch.encode('utf-8'))
 print(json.dumps(dict(verified_original_files=len(originals), changed_files=changed,
-                     patch='adaptado/patches/0001-preserve-transported-moments.patch')))
+                     patches=sorted(p.name for p in patchdir.glob('*.patch')))))

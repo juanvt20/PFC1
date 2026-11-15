@@ -211,3 +211,124 @@ no se activó el descenso a Medium y no se corrieron microbenchmarks de
 rendimiento. No hay tiempos para estimar un presupuesto de fine-tuning.
 La comparación queda pendiente de resolver este bloqueo, sin ampliar el
 alcance a otras familias.
+
+## Continuación autorizada: 14 de noviembre de 2026
+
+Esta sección sustituye el estado de bloqueo de N14 descrito arriba; conserva
+esa evidencia histórica. El segundo parche está separado del de momentos:
+`adaptado/patches/0002-drain-pending-operations.patch`. Implementa drain en
+evaluación, recalibración, guardado y salida normal; clear rechaza trabajo
+pendiente. El orden FCFS/LCFS durante entrenamiento no cambia y las
+iteraciones ordinarias no vacían la cola.
+
+La prueba v1 detectó que aplicar hooks después del matmul usaba pesos
+atrasados (Algoritmo3, p.11, línea5). Se movieron antes de consumirlos.
+La v2 pasó siete casos, pero un LSP float32 mostró diferencia en W con M/V
+iguales. Se protegió la vida de los buffers CUDA con record_stream en D2H
+y en la actualización. No se ampliaron tolerancias ni se cambiaron fórmulas.
+Los parches intermedios y resultados fallidos permanecen en sus directorios
+locales. La v3 pasa los ocho casos y W/M/V coinciden exactamente con serial
+en los límites observados (atol2e-6, rtol5e-5 admitidos). Los contadores y
+tokens de actualización verifican aplicación exactamente una vez, incluido
+doble drain, evaluación, recalibración, guardado y salida. Son doce pasos,
+seis capas y las mismas entradas/pesos/proyectores en cada par. La prueba
+usa d8/r1 para evitar ambigüedad de colisiones; no cambia el r8 del piloto.
+
+Comandos definitivos (IDs ya existentes, no sobrescribir):
+
+```powershell
+& ./LSP-OFFLOAD/tools/run_regression.ps1 -Suite equivalence -Source adaptado -RunId scheduler-drain-multistep-v3
+& ./LSP-OFFLOAD/tools/run_regression.ps1 -Suite gpt2 -Source adaptado -RunId scheduler-gpt2-checkpointing-v2
+& ./LSP-OFFLOAD/tools/fetch_pilot_assets.ps1
+& ./LSP-OFFLOAD/tools/run_comparison.ps1
+```
+
+El test GPT2 aleatorio pequeño pasa seis pasos en ambas rutas con checkpointing,
+ocho matrices y embeddings congelados. El control sin hook de gradientes de
+activación falla con `element 0 of tensors does not require grad and does not
+have a grad_fn`. `enable_input_require_grads()` en el wrapper común corrige
+la compatibilidad de checkpointing; no añade parámetros entrenables. No es
+una medición de calidad de GPT2 preentrenado. El primer intento de este test
+omitió dos argumentos del wrapper y falló antes de probar la propiedad;
+se conserva el log y no se atribuye ese fallo al algoritmo.
+
+Los activos reales están fijados y tienen hashes en `configs/pilot_assets.json`:
+Alpaca GPT-4, 52 002 ejemplos, commit80cda626ea305004be42426671c66efebbf22144;
+GPT2 Large, commit32b71b12589c2f8d625668d2335a01cac3249519. Datos y pesos
+permanecen locales/excluidos. Los wrappers conservan formato, split90%,
+16 ejemplos de calibración, batch4, longitud máxima512, padding múltiplo8,
+bf16 y Adam CPU float32 (lr1e-4, eps1e-4) del perfil de scripts. Se mantiene
+la computación original de regularización con coeficiente0. Se registra una
+semilla local2026. La evaluación corta usa los primeros64 ejemplos del split
+de evaluación original: perplexity sin alterar `calculate_ppl`, no un resultado
+de calidad comparable a la evaluación completa del paper.
+
+La identidad es explícita: Zero=`Scheduler(zero=True)` + compresor identidad;
+LSP=`zero=False`, d512/r8, gaussian, FCFSpoint=min(32,n_modules/2), delays
+FCFSprocess1/H2D2/update2 y LCFSd2h1000/process2/H2D1. Mismo Adam CPU.
+LSP usa100 iteraciones comunes de ajuste,0 específicas, lr0.1 y umbral0.8
+del script; las diferencias previas con el paper siguen documentadas.
+El piloto acorta CheckFreq1000 a50 para atravesar recalibración real; la
+comparación de rendimiento restaura1000. No se usa el nombre de un script
+para deducir qué ruta se ejecuta.
+
+**OOM real de Large:** `scheduler-v3-pilot-gpt2-large-zero-0` terminó con
+exit137 y Docker `State.OOMKilled=true`, al inicializar estados del optimizador,
+antes de entrenar. Wall-clock externo36.727s; última muestra RSS7 438 909 440B,
+RAM disponible40 722 432B y RAM total8 171 515 904B. El proceso fue eliminado
+antes de escribir resumen Python; el wrapper registra estado Docker y conserva
+telemetría/log. No es un tiempo por iteración. Se activa el único descenso
+autorizado a GPT2 Medium para ambos métodos, sin aumentar RAM/swap ni modificar
+batch/longitud/técnica.
+
+**Piloto Medium superado.** Checkpoint6dcaa7a952f72f9298047fd5137cd6e4f05f41da,
+354 823 168 parámetros totales; ambas rutas actualizan301 989 888 parámetros
+en96 matrices y congelan el resto. Cada matriz termina con contador100.
+Losses finitas, pesos modificados, evaluación/cierre completados. LSP cambia
+proyectores realmente en el paso50 sin incrementar contadores durante el fit.
+
+| Diagnóstico de ejecución,100 pasos | Zero | LSP d512/r8 |
+| --- | ---: | ---: |
+| Tiempo total del proceso Python,s |90.457|102.157|
+| Tiempo externo Docker,s (incluye arranque) |99.323|108.945|
+| Entrenamiento incl. drain final,s |82.048|73.304|
+| Inicialización de proyectores,s |no aplica|3.501|
+| Recalibración real en paso50,s |no aplica|18.816|
+| Evaluación64 ejemplos,s |1.056|1.034|
+| Pico GPU allocated de PyTorch,GiB |2.146|2.177|
+| Pico GPU reserved de PyTorch,GiB |3.193|3.178|
+| Pico RSS muestreado,GiB |5.255|5.390|
+
+La frecuencia50 solo prueba recalibración; estos totales no son el benchmark
+principal. Las iteraciones LSP74–78 incluyen duraciones3.27–3.89s, frente a
+muchas otras de aproximadamente0.4s; no se atribuye una causa sin evidencia
+ni se usa esta variación como dispersión entre ejecuciones. La telemetría
+completa permanece en samples.csv y los pasos en steps.csv.
+
+| Calidad diagnóstica sobre64 ejemplos,100 pasos; no convergencia | Zero | LSP |
+| --- | ---: | ---: |
+| Media de loss por batch (log de perplexity original) |1.608398|1.592773|
+| Perplexity original exp(media loss por batch) |4.994805|4.917368|
+
+No son métricas de convergencia ni una comparación de calidad final. Se
+conservan el tratamiento original de padding/prompt y la media por batches.
+El conjunto completo de evaluación contiene5 185 ejemplos; no se confunde
+con el subconjunto diagnóstico. Los IDs son
+`scheduler-v3-pilot-gpt2-medium-zero-0` y `scheduler-v3-pilot-gpt2-medium-lsp-0`.
+Cada ejecución guarda config, environment, command, resumen, CSV y log local;
+el resumen compacto reproducible está en `configs/comparison_summary.json`,
+generado por `tools/summarize_comparison.py` exclusivamente desde mediciones.
+
+Se prepara la comparación de rendimiento con tres procesos independientes
+por método, cinco pasos de calentamiento y veinte medidos; se alterna el
+orden entre métodos. CheckFreq vuelve a1000, sin recalibraciones dentro de
+esas ventanas. El drain posterior al calentamiento separa ventanas y el
+drain final está incluido en el tiempo medido; no se drena por iteración.
+La calibración inicial y evaluación se registran fuera de esa ventana.
+El commit de adaptación, pruebas y wrappers precede esas seis ejecuciones.
+
+Comprobación tras terminar los parches:99/99 archivos originales y objetos
+Git coinciden, sin discrepancias de bytes ni de finales de línea. El diff
+de STRONHOLD está vacío. No se modifica core.autocrlf; las advertencias de
+Git sobre archivos propios no implican cambios del upstream. PDF, entornos,
+modelos, datos y resultados pesados siguen excluidos.

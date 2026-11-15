@@ -1,6 +1,6 @@
 # PFC1: LSP-Offload
 
-Estado al 13 de noviembre de 2026: **corrección aislada de momentos implementada y validada; piloto detenido por pérdida de actualizaciones en el planificador**. La copia adaptada conserva M/V completos tras dos recalibraciones en CPU/GPU. La prueba de evaluación/cierre confirma N14 tanto en Zero como en FCFS/LCFS. No hay resultados propios de entrenamiento o rendimiento. Véanse [adaptación y pruebas](adaptado/README.md) y [evidencia del bloqueo](docs/VALIDACION_LOCAL.md).
+Estado al 14 de noviembre de 2026: **parches separados de momentos y planificador validados; ambos pilotos Medium completaron 100 pasos y evaluación**. LSP atravesó una recalibración real. GPT-2 Large falló por OOM de RAM en la inicialización de Zero (Docker exit137/OOMKilled); se aplicó el único descenso autorizado a Medium para ambos métodos. La comparación corta queda preparada, con CheckFreq1000. Véanse [adaptación y pruebas](adaptado/README.md), [registro de ejecuciones](docs/VALIDACION_LOCAL.md) y [resumen automático](configs/comparison_summary.json).
 
 La primera reproducción propuesta utiliza **RoBERTa-base + GLUE** para validar el aprendizaje de proyectores y **GPT-2 Large + Alpaca GPT-4** para validar offloading CPU y planificación por capas. DeepSeek-Coder-1.3B queda condicionado a memoria y corrección; 6.7B no cabe en la ruta original con 8 GB de VRAM.
 
@@ -21,7 +21,7 @@ El upstream auditado es https://github.com/gulang2019/LSP-Offload, commit `d9dc9
 | Directorio | Uso |
 | --- | --- |
 | `original/` | Procedencia y copia intacta en `original/upstream/`, excluida de Git |
-| `adaptado/` | Copia local excluida de Git, parche N15 versionado y pruebas; scheduler pendiente |
+| `adaptado/` | Copia local excluida de Git, parches separados N15/N14 y pruebas versionadas |
 | `docker/` | Dockerfile independiente, requisitos y registro de versiones; imagen local `pfc-lsp-offload:torch271-cu128` |
 | `configs/` | Planes y configuraciones versionados |
 | `datasets/` | Datos y cachés locales, excluidos de Git |

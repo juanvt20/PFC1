@@ -1,11 +1,11 @@
 {
-  "status": "blocked_by_scheduler_boundary_update_loss",
+  "status": "medium_pilots_passed_short_comparison_ready",
   "upstream_commit": "d9dc92a32b7e4829116ba6abec17c280dfb548a4",
   "patch": "adaptado/patches/0001-preserve-transported-moments.patch",
   "algorithm_accepted": false,
-  "training_attempted": false,
-  "oom_observed": false,
-  "fallback_to_medium": false,
+  "training_attempted": true,
+  "oom_observed": true,
+  "fallback_to_medium": true,
   "performance_measured": false,
   "tests": {
     "moments_original": {
@@ -2048,9 +2048,714 @@
         ],
         "passed": false
       }
+    },
+    "scheduler_equivalence": {
+      "run_id": "scheduler-drain-multistep-v3",
+      "report_sha256": "638cad8c9d5fdcd3ebf1807b26cf69f86b033cec29a004f754402ee69fdf040f",
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "tools/validate_scheduler_equivalence.py",
+          "--source",
+          "adaptado",
+          "--run-id",
+          "scheduler-drain-multistep-v3"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-15T03:23:11.6060882Z",
+        "ended_utc": "2026-11-15T03:23:19.0901745Z",
+        "test_sha256": "60CF5E6AB4501A5169CFD08302C1CCEB961EFD25580346565D6FD0FFF03D2201",
+        "log": "logs/scheduler-drain-multistep-v3.log"
+      },
+      "report": {
+        "source": "adaptado",
+        "scope": "12_steps_6_layers_cpu_adam_same_inputs_weights_projectors",
+        "rtol": 5e-05,
+        "atol": 2e-06,
+        "diagnostic_projectors": "d8/r1 Gaussian with original sampling; r1 avoids duplicate-index ambiguity",
+        "passed": true,
+        "cases": [
+          {
+            "route": "zero",
+            "checkpointing": false,
+            "dtype": "torch.float32",
+            "passed": true,
+            "scheduler": {
+              "zero": true
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "zero",
+            "checkpointing": false,
+            "dtype": "torch.bfloat16",
+            "passed": true,
+            "scheduler": {
+              "zero": true
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "zero",
+            "checkpointing": true,
+            "dtype": "torch.float32",
+            "passed": true,
+            "scheduler": {
+              "zero": true
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "zero",
+            "checkpointing": true,
+            "dtype": "torch.bfloat16",
+            "passed": true,
+            "scheduler": {
+              "zero": true
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "lsp",
+            "checkpointing": false,
+            "dtype": "torch.float32",
+            "passed": true,
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 3,
+              "fcfs_process_delay": 1,
+              "fcfs_h2d_delay": 1,
+              "fcfs_upd_delay": 1,
+              "lcfs_d2h_delay": 99,
+              "lcfs_process_delay": 1,
+              "lcfs_h2d_delay": 0
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "recalibration_does_not_increment_steps",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "lsp",
+            "checkpointing": false,
+            "dtype": "torch.bfloat16",
+            "passed": true,
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 3,
+              "fcfs_process_delay": 1,
+              "fcfs_h2d_delay": 1,
+              "fcfs_upd_delay": 1,
+              "lcfs_d2h_delay": 99,
+              "lcfs_process_delay": 1,
+              "lcfs_h2d_delay": 0
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "recalibration_does_not_increment_steps",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "lsp",
+            "checkpointing": true,
+            "dtype": "torch.float32",
+            "passed": true,
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 3,
+              "fcfs_process_delay": 1,
+              "fcfs_h2d_delay": 1,
+              "fcfs_upd_delay": 1,
+              "lcfs_d2h_delay": 99,
+              "lcfs_process_delay": 1,
+              "lcfs_h2d_delay": 0
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "recalibration_does_not_increment_steps",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "lsp",
+            "checkpointing": true,
+            "dtype": "torch.bfloat16",
+            "passed": true,
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 3,
+              "fcfs_process_delay": 1,
+              "fcfs_h2d_delay": 1,
+              "fcfs_upd_delay": 1,
+              "lcfs_d2h_delay": 99,
+              "lcfs_process_delay": 1,
+              "lcfs_h2d_delay": 0
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "recalibration_does_not_increment_steps",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          }
+        ]
+      }
+    },
+    "gpt2_checkpointing": {
+      "run_id": "scheduler-gpt2-checkpointing-v2",
+      "report_sha256": "5c564876885dd6c9ffe6ef2de11fb6dd7203fb59769d6caa97223d7b214fead2",
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "tools/validate_gpt2_checkpointing.py",
+          "--source",
+          "adaptado",
+          "--run-id",
+          "scheduler-gpt2-checkpointing-v2"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-15T03:28:11.5932349Z",
+        "ended_utc": "2026-11-15T03:28:16.1485079Z",
+        "test_sha256": "645219D42644EDB728E34696A7F41DE7B3BF720D62CA3CC82291A7753FB4C319",
+        "log": "logs/scheduler-gpt2-checkpointing-v2.log"
+      },
+      "report": {
+        "scope": "tiny_random_GPT2_checkpointing_not_pretrained_pilot",
+        "cases": [
+          {
+            "passed": false,
+            "error": "Traceback (most recent call last):\n  File \"/work/tools/validate_gpt2_checkpointing.py\", line 61, in <module>\n    row=run(route,hook)\n        ^^^^^^^^^^^^^^^\n  File \"/work/tools/validate_gpt2_checkpointing.py\", line 47, in run\n    loss.backward()\n  File \"/opt/conda/lib/python3.11/site-packages/torch/_tensor.py\", line 648, in backward\n    torch.autograd.backward(\n  File \"/opt/conda/lib/python3.11/site-packages/torch/autograd/__init__.py\", line 353, in backward\n    _engine_run_backward(\n  File \"/opt/conda/lib/python3.11/site-packages/torch/autograd/graph.py\", line 824, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: element 0 of tensors does not require grad and does not have a grad_fn\n",
+            "route": "zero",
+            "input_grad_hook": false
+          },
+          {
+            "passed": true,
+            "modules": 8,
+            "adam_steps": [
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6
+            ],
+            "losses": [
+              4.84375,
+              4.84375,
+              4.875,
+              4.84375,
+              4.875,
+              4.875
+            ],
+            "embedding_weights_trainable": false,
+            "route": "zero",
+            "input_grad_hook": true
+          },
+          {
+            "passed": true,
+            "modules": 8,
+            "adam_steps": [
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6
+            ],
+            "losses": [
+              4.84375,
+              4.8125,
+              4.8125,
+              4.875,
+              4.875,
+              4.84375
+            ],
+            "embedding_weights_trainable": false,
+            "route": "lsp",
+            "input_grad_hook": true
+          }
+        ],
+        "passed": true
+      }
     }
   },
   "patch_sha256": "000be9e6a421792589261caed883cfc3199131b392f6c49f2123bc134f97de42",
   "image_identity_record": "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006 [\"pfc-lsp-offload@sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006\"]",
-  "scope_note": "Only moment preservation is patched; scheduler test failure is an explicit execution gate. Original sources remain intact."
+  "scope_note": "Two separately authorized patches; eight multi-step scheduler cases and GPT2 input-hook compatibility passed. Long training and convergence not validated.",
+  "scheduler_patch": {
+    "path": "adaptado/patches/0002-drain-pending-operations.patch",
+    "sha256": "966e7327cc5b49c9b32e49ff1040a3801d501944625740652c8db25fabbdd7ce",
+    "earlier_runs": {
+      "scheduler-drain-multistep-v1": "all boundaries exact-once but tensor equality failed; hooks ran after matmul",
+      "scheduler-drain-multistep-v2": "7 of 8 cases passed; LSP float32 W mismatch with equal M/V; added stream lifetime records",
+      "scheduler-gpt2-checkpointing": "test harness initially missed required use_lora/lora_rank arguments; fixed test, not upstream math"
+    }
+  },
+  "pilot_gate": "results/scheduler-v3-pilot-gate.json",
+  "upstream_byte_verification": {
+    "files": 99,
+    "byte_mismatches": [],
+    "object_mismatches": [],
+    "eol_only": [],
+    "git_diff_content_empty": true
+  }
 }

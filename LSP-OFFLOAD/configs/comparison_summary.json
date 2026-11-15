@@ -1,0 +1,3283 @@
+{
+  "campaign": "scheduler-v3",
+  "convergence_claim": false,
+  "runs": [
+    {
+      "summary": {
+        "run_id": "scheduler-v3-pilot-gpt2-large-zero-0",
+        "model": "gpt2-large",
+        "method": "zero",
+        "kind": "pilot",
+        "status": "oom",
+        "exit_code": 137,
+        "oom_killed": true,
+        "error": "Process ended without Python summary; see Docker state, log and last samples/progress",
+        "host_wall_seconds": 36.7271303,
+        "convergence_claim": false
+      },
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--name",
+          "pfc-lsp-scheduler-v3-pilot-gpt2-large-zero-0",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\adaptado\\upstream,target=/work/adaptado/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=14",
+          "-e",
+          "HF_HUB_OFFLINE=1",
+          "-e",
+          "TRANSFORMERS_OFFLINE=1",
+          "-e",
+          "PFC_COMMIT=cdf5bcac59f61dc706282a5321a111d1ae4dca24",
+          "-e",
+          "PFC_DIRTY=True",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "-u",
+          "tools/run_pilot.py",
+          "--model",
+          "gpt2-large",
+          "--method",
+          "zero",
+          "--kind",
+          "pilot",
+          "--run-id",
+          "scheduler-v3-pilot-gpt2-large-zero-0",
+          "--steps",
+          "100",
+          "--warmup",
+          "5",
+          "--seed",
+          "2026"
+        ],
+        "exit_code": 137,
+        "started_utc": "2026-11-15T03:48:18.4075018Z",
+        "ended_utc": "2026-11-15T03:48:55.1346321Z",
+        "host_wall_seconds": 36.7271303,
+        "git_commit": "cdf5bcac59f61dc706282a5321a111d1ae4dca24",
+        "git_dirty": true,
+        "image_id": "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006",
+        "oom_killed": true,
+        "script_sha256": "9227CC1E6DFEA4CCE18B0EDF1CB3975985DDB6AFBC3F36C1FDDF7C210513ECFD",
+        "log": "logs/scheduler-v3-pilot-gpt2-large-zero-0.log"
+      },
+      "local_path": "results\\scheduler-v3-pilot-gpt2-large-zero-0",
+      "summary_sha256": "6bf9f08c449f1c9fc21ed162fe44774740639c52cdc722a19809c32a50330041",
+      "config": {
+        "model": "gpt2-large",
+        "method": "zero",
+        "kind": "pilot",
+        "run_id": "scheduler-v3-pilot-gpt2-large-zero-0",
+        "steps": 100,
+        "warmup": 5,
+        "seed": 2026,
+        "batch": 4,
+        "max_sequence_length": 512,
+        "weights_dtype": "bfloat16",
+        "optimizer_dtype": "float32",
+        "optimizer": "upstream CPU fused Adam",
+        "epsilon": 0.0001,
+        "learning_rate": 0.0001,
+        "l2_reg": 0.0,
+        "d": null,
+        "r": null,
+        "check_frequency": 50,
+        "projector_threshold": 0.8,
+        "projector_init": "gaussian",
+        "projector_iterations": 100,
+        "projector_specific_iterations": 0,
+        "projector_lr": 0.1,
+        "checkpointing": true,
+        "input_activation_grad_hook": true,
+        "seed_origin": "local explicit seed, not claimed as authors seed",
+        "evaluation": "first 64 examples of the original evaluation split; diagnostic subset, not full quality evaluation",
+        "perplexity_definition": "unchanged upstream calculate_ppl: exp(mean(batch loss)), padding/prompt semantics retained",
+        "model_asset": {
+          "repository": "openai-community/gpt2-large",
+          "revision": "32b71b12589c2f8d625668d2335a01cac3249519",
+          "snapshot": "models/hf-cache/models--openai-community--gpt2-large/snapshots/32b71b12589c2f8d625668d2335a01cac3249519",
+          "files": {
+            "config.json": {
+              "sha256": "7fccdcfd6622055342a734c663ee0b61ff4fd697f42467595df0bf4448c8c170",
+              "bytes": 666
+            },
+            "generation_config.json": {
+              "sha256": "b90eadacf585a743a30ea51e8b5c88b8d282a2a34dc0c7e556d0987cdbd68805",
+              "bytes": 124
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "model.safetensors": {
+              "sha256": "5f47f3e12f91cd33b662ce7e433b6150ad5512b5884a2cee961b50e9c3bbebce",
+              "bytes": 3247159078
+            },
+            "tokenizer.json": {
+              "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+              "bytes": 1355256
+            },
+            "tokenizer_config.json": {
+              "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+              "bytes": 26
+            },
+            "vocab.json": {
+              "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783",
+              "bytes": 1042301
+            }
+          }
+        },
+        "dataset_asset": {
+          "repository": "Instruction-Tuning-with-GPT-4/GPT-4-LLM",
+          "revision": "80cda626ea305004be42426671c66efebbf22144",
+          "url": "https://raw.githubusercontent.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM/80cda626ea305004be42426671c66efebbf22144/data/alpaca_gpt4_data.json",
+          "path": "datasets/alpaca_gpt4_data.json",
+          "sha256": "0bd4f62585d494b794deb043ce0baddfec02f27696857c57c9c238d6eff35a18",
+          "examples": 52002
+        },
+        "git_commit": "cdf5bcac59f61dc706282a5321a111d1ae4dca24",
+        "git_dirty": "True",
+        "adaptations": [
+          "explicit baseline scheduler flag",
+          "LSP explicit FCFS/LCFS delays",
+          "boundary drain and pre-matmul update dependency",
+          "CUDA buffer record_stream",
+          "preserve transported moments",
+          "HF input activation grad hook with embeddings frozen",
+          "short diagnostic evaluation subset64",
+          "lazy tokenization without upstream diskcache",
+          "CheckFreq shortened from1000 to50 for pilot only"
+        ],
+        "versions": {
+          "python": "3.11.13",
+          "torch": "2.7.1+cu128",
+          "cuda": "12.8",
+          "transformers": "4.44.2"
+        },
+        "patches": {
+          "0001-preserve-transported-moments.patch": "000be9e6a421792589261caed883cfc3199131b392f6c49f2123bc134f97de42",
+          "0002-drain-pending-operations.patch": "966e7327cc5b49c9b32e49ff1040a3801d501944625740652c8db25fabbdd7ce"
+        },
+        "split": {
+          "train": [
+            0,
+            46801
+          ],
+          "calibration": [
+            46801,
+            46817
+          ],
+          "original_eval": [
+            46817,
+            52002
+          ],
+          "diagnostic_eval": [
+            46817,
+            46881
+          ]
+        },
+        "trainable_parameters": 707788800,
+        "total_parameters": 774030080,
+        "offload_modules": [
+          {
+            "name": "transformer.h.0.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.0.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.0.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.0.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.1.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.1.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.1.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.1.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.2.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.2.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.2.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.2.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.3.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.3.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.3.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.3.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.4.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.4.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.4.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.4.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.5.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.5.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.5.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.5.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.6.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.6.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.6.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.6.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.7.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.7.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.7.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.7.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.8.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.8.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.8.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.8.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.9.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.9.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.9.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.9.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.10.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.10.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.10.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.10.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.11.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.11.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.11.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.11.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.12.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.12.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.12.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.12.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.13.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.13.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.13.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.13.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.14.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.14.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.14.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.14.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.15.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.15.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.15.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.15.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.16.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.16.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.16.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.16.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.17.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.17.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.17.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.17.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.18.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.18.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.18.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.18.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.19.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.19.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.19.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.19.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.20.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.20.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.20.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.20.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.21.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.21.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.21.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.21.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.22.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.22.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.22.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.22.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.23.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.23.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.23.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.23.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.24.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.24.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.24.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.24.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.25.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.25.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.25.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.25.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.26.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.26.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.26.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.26.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.27.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.27.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.27.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.27.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.28.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.28.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.28.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.28.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.29.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.29.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.29.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.29.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.30.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.30.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.30.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.30.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.31.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.31.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.31.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.31.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.32.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.32.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.32.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.32.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.33.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.33.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.33.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.33.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.34.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.34.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.34.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.34.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.35.attn.c_attn",
+            "shape": [
+              1280,
+              3840
+            ]
+          },
+          {
+            "name": "transformer.h.35.attn.c_proj",
+            "shape": [
+              1280,
+              1280
+            ]
+          },
+          {
+            "name": "transformer.h.35.mlp.c_fc",
+            "shape": [
+              1280,
+              5120
+            ]
+          },
+          {
+            "name": "transformer.h.35.mlp.c_proj",
+            "shape": [
+              5120,
+              1280
+            ]
+          }
+        ],
+        "scheduler": {
+          "zero": true,
+          "fcfs_point": 32,
+          "fcfs_process_delay": 1,
+          "fcfs_h2d_delay": 2,
+          "fcfs_upd_delay": 2,
+          "lcfs_d2h_delay": 1000,
+          "lcfs_process_delay": 2,
+          "lcfs_h2d_delay": 1
+        }
+      },
+      "last_sample": {
+        "elapsed_s": "27.184348815000703",
+        "phase": "optimizer_init",
+        "rss_bytes": "7494901760",
+        "ram_available_bytes": "76345344",
+        "ram_total_bytes": "8171515904",
+        "swap_used_bytes": "2044342272",
+        "gpu_allocated_bytes": "1585827328",
+        "gpu_reserved_bytes": "1732247552",
+        "gpu_max_allocated_bytes": "1585827328",
+        "gpu_max_reserved_bytes": "1732247552",
+        "gpu_free_bytes": "5660213248",
+        "gpu_total_bytes": "8546484224",
+        "memory.current": "7599386624",
+        "memory.peak": "7604781056"
+      },
+      "sampled_peak_rss_bytes": 7495532544
+    },
+    {
+      "summary": {
+        "run_id": "scheduler-v3-pilot-gpt2-medium-lsp-0",
+        "kind": "pilot",
+        "status": "success",
+        "method": "lsp",
+        "model": "gpt2-medium",
+        "convergence_claim": false,
+        "performance_window": null,
+        "calibrations": [
+          {
+            "step": 0,
+            "seconds": 3.5014584040000045,
+            "initialization": true,
+            "learned_recalibration": false
+          },
+          {
+            "step": 50,
+            "seconds": 18.815727495999454,
+            "initialization": false,
+            "learned_recalibration": true
+          }
+        ],
+        "evaluations": [
+          {
+            "step": 100,
+            "perplexity": 4.917368046651965,
+            "mean_batch_loss": 1.5927734375,
+            "mean_batch_loss_origin": "log of original evaluator perplexity",
+            "examples": 64,
+            "seconds": 1.0341175590001512,
+            "scope": "diagnostic_subset_not_convergence"
+          }
+        ],
+        "completed_steps": 100,
+        "adam_counters": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ],
+        "train_seconds": 73.3035758519909,
+        "initial_weight_sample_max_change": 0.002197265625,
+        "final_train_loss": 1.09375,
+        "diagnostic_iterations_per_second": 1.3641899298598001,
+        "diagnostic_seconds_per_iteration": 0.733035758519909,
+        "real_total_seconds": 102.15652919099921,
+        "exit_code": 0,
+        "memory_peaks": {
+          "rss_bytes": 5787639808,
+          "gpu_allocated_bytes": 1919070208,
+          "gpu_reserved_bytes": 3412066304,
+          "gpu_max_allocated_bytes": 2337548288,
+          "gpu_max_reserved_bytes": 3412066304,
+          "memory.current": 5556596736,
+          "memory.peak": 5599428608
+        }
+      },
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--name",
+          "pfc-lsp-scheduler-v3-pilot-gpt2-medium-lsp-0",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\adaptado\\upstream,target=/work/adaptado/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=14",
+          "-e",
+          "HF_HUB_OFFLINE=1",
+          "-e",
+          "TRANSFORMERS_OFFLINE=1",
+          "-e",
+          "PFC_COMMIT=cdf5bcac59f61dc706282a5321a111d1ae4dca24",
+          "-e",
+          "PFC_DIRTY=True",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "-u",
+          "tools/run_pilot.py",
+          "--model",
+          "gpt2-medium",
+          "--method",
+          "lsp",
+          "--kind",
+          "pilot",
+          "--run-id",
+          "scheduler-v3-pilot-gpt2-medium-lsp-0",
+          "--steps",
+          "100",
+          "--warmup",
+          "5",
+          "--seed",
+          "2026"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-15T03:52:43.4038347Z",
+        "ended_utc": "2026-11-15T03:54:32.3490916Z",
+        "host_wall_seconds": 108.94525689999999,
+        "git_commit": "cdf5bcac59f61dc706282a5321a111d1ae4dca24",
+        "git_dirty": true,
+        "image_id": "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006",
+        "oom_killed": false,
+        "script_sha256": "9227CC1E6DFEA4CCE18B0EDF1CB3975985DDB6AFBC3F36C1FDDF7C210513ECFD",
+        "log": "logs/scheduler-v3-pilot-gpt2-medium-lsp-0.log"
+      },
+      "local_path": "results\\scheduler-v3-pilot-gpt2-medium-lsp-0",
+      "summary_sha256": "05f135f662d05ae7779025b79d9bd51c57795660a141f1cd8bf40ab568808cdf",
+      "config": {
+        "model": "gpt2-medium",
+        "method": "lsp",
+        "kind": "pilot",
+        "run_id": "scheduler-v3-pilot-gpt2-medium-lsp-0",
+        "steps": 100,
+        "warmup": 5,
+        "seed": 2026,
+        "batch": 4,
+        "max_sequence_length": 512,
+        "weights_dtype": "bfloat16",
+        "optimizer_dtype": "float32",
+        "optimizer": "upstream CPU fused Adam",
+        "epsilon": 0.0001,
+        "learning_rate": 0.0001,
+        "l2_reg": 0.0,
+        "d": 512,
+        "r": 8,
+        "check_frequency": 50,
+        "projector_threshold": 0.8,
+        "projector_init": "gaussian",
+        "projector_iterations": 100,
+        "projector_specific_iterations": 0,
+        "projector_lr": 0.1,
+        "checkpointing": true,
+        "input_activation_grad_hook": true,
+        "seed_origin": "local explicit seed, not claimed as authors seed",
+        "evaluation": "first 64 examples of the original evaluation split; diagnostic subset, not full quality evaluation",
+        "perplexity_definition": "unchanged upstream calculate_ppl: exp(mean(batch loss)), padding/prompt semantics retained",
+        "model_asset": {
+          "repository": "openai-community/gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "snapshot": "models/hf-cache/models--openai-community--gpt2-medium/snapshots/6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "files": {
+            "config.json": {
+              "sha256": "ef1a44d889ad1a0acc7731c78134f1b87d2d222f110e97dd10fd4117331caf22",
+              "bytes": 718
+            },
+            "generation_config.json": {
+              "sha256": "b90eadacf585a743a30ea51e8b5c88b8d282a2a34dc0c7e556d0987cdbd68805",
+              "bytes": 124
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "model.safetensors": {
+              "sha256": "fc5a354a19255ad494f3d71549390baca1ccf61d1d822b9408971705c687c9cd",
+              "bytes": 1519984962
+            },
+            "tokenizer.json": {
+              "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+              "bytes": 1355256
+            },
+            "tokenizer_config.json": {
+              "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+              "bytes": 26
+            },
+            "vocab.json": {
+              "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783",
+              "bytes": 1042301
+            }
+          }
+        },
+        "dataset_asset": {
+          "repository": "Instruction-Tuning-with-GPT-4/GPT-4-LLM",
+          "revision": "80cda626ea305004be42426671c66efebbf22144",
+          "url": "https://raw.githubusercontent.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM/80cda626ea305004be42426671c66efebbf22144/data/alpaca_gpt4_data.json",
+          "path": "datasets/alpaca_gpt4_data.json",
+          "sha256": "0bd4f62585d494b794deb043ce0baddfec02f27696857c57c9c238d6eff35a18",
+          "examples": 52002
+        },
+        "git_commit": "cdf5bcac59f61dc706282a5321a111d1ae4dca24",
+        "git_dirty": "True",
+        "adaptations": [
+          "explicit baseline scheduler flag",
+          "LSP explicit FCFS/LCFS delays",
+          "boundary drain and pre-matmul update dependency",
+          "CUDA buffer record_stream",
+          "preserve transported moments",
+          "HF input activation grad hook with embeddings frozen",
+          "short diagnostic evaluation subset64",
+          "lazy tokenization without upstream diskcache",
+          "CheckFreq shortened from1000 to50 for pilot only",
+          "single authorized size fallback from GPT2-774M to GPT2-Medium"
+        ],
+        "versions": {
+          "python": "3.11.13",
+          "torch": "2.7.1+cu128",
+          "cuda": "12.8",
+          "transformers": "4.44.2"
+        },
+        "patches": {
+          "0001-preserve-transported-moments.patch": "000be9e6a421792589261caed883cfc3199131b392f6c49f2123bc134f97de42",
+          "0002-drain-pending-operations.patch": "966e7327cc5b49c9b32e49ff1040a3801d501944625740652c8db25fabbdd7ce"
+        },
+        "split": {
+          "train": [
+            0,
+            46801
+          ],
+          "calibration": [
+            46801,
+            46817
+          ],
+          "original_eval": [
+            46817,
+            52002
+          ],
+          "diagnostic_eval": [
+            46817,
+            46881
+          ]
+        },
+        "trainable_parameters": 301989888,
+        "total_parameters": 354823168,
+        "offload_modules": [
+          {
+            "name": "transformer.h.0.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.0.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.0.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.0.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.1.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.1.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.1.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.1.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.2.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.2.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.2.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.2.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.3.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.3.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.3.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.3.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.4.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.4.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.4.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.4.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.5.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.5.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.5.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.5.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.6.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.6.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.6.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.6.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.7.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.7.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.7.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.7.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.8.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.8.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.8.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.8.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.9.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.9.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.9.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.9.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.10.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.10.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.10.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.10.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.11.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.11.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.11.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.11.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.12.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.12.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.12.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.12.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.13.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.13.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.13.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.13.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.14.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.14.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.14.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.14.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.15.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.15.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.15.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.15.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.16.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.16.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.16.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.16.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.17.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.17.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.17.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.17.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.18.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.18.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.18.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.18.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.19.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.19.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.19.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.19.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.20.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.20.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.20.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.20.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.21.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.21.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.21.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.21.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.22.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.22.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.22.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.22.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.23.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.23.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.23.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.23.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          }
+        ],
+        "scheduler": {
+          "zero": false,
+          "fcfs_point": 32,
+          "fcfs_process_delay": 1,
+          "fcfs_h2d_delay": 2,
+          "fcfs_upd_delay": 2,
+          "lcfs_d2h_delay": 1000,
+          "lcfs_process_delay": 2,
+          "lcfs_h2d_delay": 1
+        }
+      },
+      "last_sample": {
+        "elapsed_s": "101.19364646099893",
+        "phase": "evaluation",
+        "rss_bytes": "5739278336",
+        "ram_available_bytes": "2026860544",
+        "ram_total_bytes": "8171515904",
+        "swap_used_bytes": "193056768",
+        "gpu_allocated_bytes": "1692785664",
+        "gpu_reserved_bytes": "3412066304",
+        "gpu_max_allocated_bytes": "2337548288",
+        "gpu_max_reserved_bytes": "3412066304",
+        "gpu_free_bytes": "3944742912",
+        "gpu_total_bytes": "8546484224",
+        "memory.current": "5503041536",
+        "memory.peak": "5599428608"
+      },
+      "sampled_peak_rss_bytes": 5787639808
+    },
+    {
+      "summary": {
+        "run_id": "scheduler-v3-pilot-gpt2-medium-zero-0",
+        "kind": "pilot",
+        "status": "success",
+        "method": "zero",
+        "model": "gpt2-medium",
+        "convergence_claim": false,
+        "performance_window": null,
+        "calibrations": [],
+        "evaluations": [
+          {
+            "step": 100,
+            "perplexity": 4.99480532566412,
+            "mean_batch_loss": 1.6083984375,
+            "mean_batch_loss_origin": "log of original evaluator perplexity",
+            "examples": 64,
+            "seconds": 1.0557411450008658,
+            "scope": "diagnostic_subset_not_convergence"
+          }
+        ],
+        "completed_steps": 100,
+        "adam_counters": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ],
+        "train_seconds": 82.04830685399793,
+        "initial_weight_sample_max_change": 0.0018310546875,
+        "final_train_loss": 1.1015625,
+        "diagnostic_iterations_per_second": 1.2187941937418219,
+        "diagnostic_seconds_per_iteration": 0.8204830685399793,
+        "real_total_seconds": 90.45700307399966,
+        "exit_code": 0,
+        "memory_peaks": {
+          "rss_bytes": 5642510336,
+          "gpu_allocated_bytes": 1891606016,
+          "gpu_reserved_bytes": 3428843520,
+          "gpu_max_allocated_bytes": 2303933952,
+          "gpu_max_reserved_bytes": 3428843520,
+          "memory.current": 6584340480,
+          "memory.peak": 6584340480
+        }
+      },
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--name",
+          "pfc-lsp-scheduler-v3-pilot-gpt2-medium-zero-0",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\adaptado\\upstream,target=/work/adaptado/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=14",
+          "-e",
+          "HF_HUB_OFFLINE=1",
+          "-e",
+          "TRANSFORMERS_OFFLINE=1",
+          "-e",
+          "PFC_COMMIT=cdf5bcac59f61dc706282a5321a111d1ae4dca24",
+          "-e",
+          "PFC_DIRTY=True",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "-u",
+          "tools/run_pilot.py",
+          "--model",
+          "gpt2-medium",
+          "--method",
+          "zero",
+          "--kind",
+          "pilot",
+          "--run-id",
+          "scheduler-v3-pilot-gpt2-medium-zero-0",
+          "--steps",
+          "100",
+          "--warmup",
+          "5",
+          "--seed",
+          "2026"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-15T03:51:03.7420744Z",
+        "ended_utc": "2026-11-15T03:52:43.0646270Z",
+        "host_wall_seconds": 99.3225526,
+        "git_commit": "cdf5bcac59f61dc706282a5321a111d1ae4dca24",
+        "git_dirty": true,
+        "image_id": "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006",
+        "oom_killed": false,
+        "script_sha256": "9227CC1E6DFEA4CCE18B0EDF1CB3975985DDB6AFBC3F36C1FDDF7C210513ECFD",
+        "log": "logs/scheduler-v3-pilot-gpt2-medium-zero-0.log"
+      },
+      "local_path": "results\\scheduler-v3-pilot-gpt2-medium-zero-0",
+      "summary_sha256": "ee0fddd64cf8e4e01639f740416a6788cf5ed56f29892a45492d30e2b6049aa8",
+      "config": {
+        "model": "gpt2-medium",
+        "method": "zero",
+        "kind": "pilot",
+        "run_id": "scheduler-v3-pilot-gpt2-medium-zero-0",
+        "steps": 100,
+        "warmup": 5,
+        "seed": 2026,
+        "batch": 4,
+        "max_sequence_length": 512,
+        "weights_dtype": "bfloat16",
+        "optimizer_dtype": "float32",
+        "optimizer": "upstream CPU fused Adam",
+        "epsilon": 0.0001,
+        "learning_rate": 0.0001,
+        "l2_reg": 0.0,
+        "d": null,
+        "r": null,
+        "check_frequency": 50,
+        "projector_threshold": 0.8,
+        "projector_init": "gaussian",
+        "projector_iterations": 100,
+        "projector_specific_iterations": 0,
+        "projector_lr": 0.1,
+        "checkpointing": true,
+        "input_activation_grad_hook": true,
+        "seed_origin": "local explicit seed, not claimed as authors seed",
+        "evaluation": "first 64 examples of the original evaluation split; diagnostic subset, not full quality evaluation",
+        "perplexity_definition": "unchanged upstream calculate_ppl: exp(mean(batch loss)), padding/prompt semantics retained",
+        "model_asset": {
+          "repository": "openai-community/gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "snapshot": "models/hf-cache/models--openai-community--gpt2-medium/snapshots/6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "files": {
+            "config.json": {
+              "sha256": "ef1a44d889ad1a0acc7731c78134f1b87d2d222f110e97dd10fd4117331caf22",
+              "bytes": 718
+            },
+            "generation_config.json": {
+              "sha256": "b90eadacf585a743a30ea51e8b5c88b8d282a2a34dc0c7e556d0987cdbd68805",
+              "bytes": 124
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "model.safetensors": {
+              "sha256": "fc5a354a19255ad494f3d71549390baca1ccf61d1d822b9408971705c687c9cd",
+              "bytes": 1519984962
+            },
+            "tokenizer.json": {
+              "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+              "bytes": 1355256
+            },
+            "tokenizer_config.json": {
+              "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+              "bytes": 26
+            },
+            "vocab.json": {
+              "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783",
+              "bytes": 1042301
+            }
+          }
+        },
+        "dataset_asset": {
+          "repository": "Instruction-Tuning-with-GPT-4/GPT-4-LLM",
+          "revision": "80cda626ea305004be42426671c66efebbf22144",
+          "url": "https://raw.githubusercontent.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM/80cda626ea305004be42426671c66efebbf22144/data/alpaca_gpt4_data.json",
+          "path": "datasets/alpaca_gpt4_data.json",
+          "sha256": "0bd4f62585d494b794deb043ce0baddfec02f27696857c57c9c238d6eff35a18",
+          "examples": 52002
+        },
+        "git_commit": "cdf5bcac59f61dc706282a5321a111d1ae4dca24",
+        "git_dirty": "True",
+        "adaptations": [
+          "explicit baseline scheduler flag",
+          "LSP explicit FCFS/LCFS delays",
+          "boundary drain and pre-matmul update dependency",
+          "CUDA buffer record_stream",
+          "preserve transported moments",
+          "HF input activation grad hook with embeddings frozen",
+          "short diagnostic evaluation subset64",
+          "lazy tokenization without upstream diskcache",
+          "CheckFreq shortened from1000 to50 for pilot only",
+          "single authorized size fallback from GPT2-774M to GPT2-Medium"
+        ],
+        "versions": {
+          "python": "3.11.13",
+          "torch": "2.7.1+cu128",
+          "cuda": "12.8",
+          "transformers": "4.44.2"
+        },
+        "patches": {
+          "0001-preserve-transported-moments.patch": "000be9e6a421792589261caed883cfc3199131b392f6c49f2123bc134f97de42",
+          "0002-drain-pending-operations.patch": "966e7327cc5b49c9b32e49ff1040a3801d501944625740652c8db25fabbdd7ce"
+        },
+        "split": {
+          "train": [
+            0,
+            46801
+          ],
+          "calibration": [
+            46801,
+            46817
+          ],
+          "original_eval": [
+            46817,
+            52002
+          ],
+          "diagnostic_eval": [
+            46817,
+            46881
+          ]
+        },
+        "trainable_parameters": 301989888,
+        "total_parameters": 354823168,
+        "offload_modules": [
+          {
+            "name": "transformer.h.0.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.0.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.0.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.0.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.1.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.1.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.1.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.1.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.2.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.2.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.2.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.2.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.3.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.3.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.3.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.3.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.4.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.4.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.4.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.4.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.5.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.5.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.5.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.5.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.6.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.6.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.6.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.6.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.7.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.7.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.7.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.7.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.8.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.8.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.8.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.8.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.9.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.9.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.9.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.9.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.10.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.10.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.10.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.10.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.11.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.11.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.11.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.11.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.12.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.12.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.12.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.12.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.13.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.13.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.13.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.13.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.14.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.14.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.14.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.14.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.15.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.15.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.15.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.15.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.16.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.16.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.16.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.16.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.17.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.17.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.17.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.17.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.18.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.18.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.18.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.18.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.19.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.19.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.19.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.19.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.20.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.20.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.20.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.20.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.21.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.21.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.21.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.21.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.22.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.22.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.22.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.22.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.23.attn.c_attn",
+            "shape": [
+              1024,
+              3072
+            ]
+          },
+          {
+            "name": "transformer.h.23.attn.c_proj",
+            "shape": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "name": "transformer.h.23.mlp.c_fc",
+            "shape": [
+              1024,
+              4096
+            ]
+          },
+          {
+            "name": "transformer.h.23.mlp.c_proj",
+            "shape": [
+              4096,
+              1024
+            ]
+          }
+        ],
+        "scheduler": {
+          "zero": true,
+          "fcfs_point": 32,
+          "fcfs_process_delay": 1,
+          "fcfs_h2d_delay": 2,
+          "fcfs_upd_delay": 2,
+          "lcfs_d2h_delay": 1000,
+          "lcfs_process_delay": 2,
+          "lcfs_h2d_delay": 1
+        }
+      },
+      "last_sample": {
+        "elapsed_s": "89.74799218500084",
+        "phase": "evaluation",
+        "rss_bytes": "5642510336",
+        "ram_available_bytes": "2212442112",
+        "ram_total_bytes": "8171515904",
+        "swap_used_bytes": "193904640",
+        "gpu_allocated_bytes": "1670280704",
+        "gpu_reserved_bytes": "3428843520",
+        "gpu_max_allocated_bytes": "2303933952",
+        "gpu_max_reserved_bytes": "3428843520",
+        "gpu_free_bytes": "3927965696",
+        "gpu_total_bytes": "8546484224",
+        "memory.current": "6581260288",
+        "memory.peak": "6584340480"
+      },
+      "sampled_peak_rss_bytes": 5642510336
+    }
+  ],
+  "performance": {},
+  "main_training_estimate": null,
+  "pilot_gate": {
+    "model": "gpt2-medium",
+    "zero": "scheduler-v3-pilot-gpt2-medium-zero-0",
+    "lsp": "scheduler-v3-pilot-gpt2-medium-lsp-0",
+    "passed": true
+  }
+}

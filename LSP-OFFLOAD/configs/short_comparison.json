@@ -1,0 +1,11 @@
+{
+  "phase": "performance",
+  "campaign": "scheduler-v3",
+  "pilot_steps": 100,
+  "performance_steps": 20,
+  "warmup_steps": 5,
+  "repetitions": 3,
+  "initial_model": "gpt2-large",
+  "only_oom_fallback": "gpt2-medium",
+  "seed": 2026
+}

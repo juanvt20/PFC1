@@ -1,6 +1,6 @@
-# Adaptación aislada: conservación de momentos
+# Adaptación aislada: momentos y cierre del planificador
 
-`patches/0001-preserve-transported-moments.patch` es el único cambio aplicado
+`patches/0001-preserve-transported-moments.patch` es el primer cambio aplicado
 al upstream en la copia local `upstream/`, excluida de Git. Corrige N15 con
 la autorización del usuario: conserva M/V ya transportados al preparar
 buffers y los devuelve al dispositivo del optimizador. No reinicia su
@@ -42,8 +42,40 @@ Referencia de transporte en float64 sobre los solapamientos con el redondeo
 original; tolerancias rtol2e-5/atol2e-6. Los tensores completos se guardan
 localmente en `.pt`; el resumen está en `configs/adaptation_validation.json`.
 
-La prueba del planificador **falla** (exit1): confirma N14 en evaluación
-y salida, tanto con Zero activado explícitamente como con una configuración
-FCFS/LCFS. El control serial pasa. No se aplicó una corrección del scheduler;
-el piloto y la comparación quedan detenidos por este bloqueo. Véase el
-registro existente `docs/VALIDACION_LOCAL.md` para evidencia y propuesta.
+La prueba anterior del planificador (`scheduler-boundaries-before-fix`)
+confirma N14. Con la autorización posterior se aplica por separado
+`patches/0002-drain-pending-operations.patch`. `tools/scheduler_patch.py`
+construye ese parche sobre el primero, conservando sus bytes.
+
+`Scheduler.drain()` consume callbacks en el orden del siguiente forward y
+espera CUDA antes de evaluar, recalibrar, guardar o salir normalmente.
+`clear()` rechaza trabajo pendiente; un drain fallido no puede reintentarse
+silenciosamente. No se vacía la cola en cada iteración. Se conservan FCFS,
+LCFS y sus delays. Los hooks que aplican pesos se ejecutan antes del matmul
+que los consume (Algoritmo3, p.11, línea5), y `record_stream` protege los
+buffers CUDA usados por D2H y actualización frente a reutilización temprana.
+Estas dos dependencias también forman parte del parche de planificación;
+no cambian fórmulas ni añaden sincronizaciones por iteración.
+
+`scheduler-drain-multistep-v3` pasa los ocho casos: Zero/LSP, con/sin
+checkpointing, pesos float32/bfloat16 y Adam CPU float32. Son 12 pasos y
+seis capas con entradas, pesos iniciales y proyectores iguales al control
+serial; W/M/V completos y contadores coinciden exactamente en esta ejecución
+(tolerancia admitida atol2e-6/rtol5e-5). Incluye evaluación, recalibración
+real, guardado, salida, doble vaciado y rechazo de clear sin descartar trabajo.
+Los proyectores d8/r1 de esta prueba son diagnósticos, no el perfil d512/r8.
+Se conservan los fallos v1/v2 y sus parches para explicar las correcciones.
+
+`scheduler-gpt2-checkpointing-v2` confirma en GPT2 pequeño aleatorio que
+congelar embeddings exige `enable_input_require_grads()` para el checkpointing
+reentrante de esta versión de Transformers. El wrapper propio lo activa
+para ambas rutas sin entrenar embeddings; las ocho matrices reciben seis
+actualizaciones. El control sin hook falla como se esperaba. El launcher
+upstream no incorpora ese hook: se documenta como adaptación del wrapper.
+
+El piloto y la comparación se ejecutan con `tools/run_comparison.ps1`,
+configuración `configs/short_comparison.json` y activos fijados en
+`configs/pilot_assets.json`. No usan los nombres de scripts como identidad:
+Zero tiene `Scheduler(zero=True)` y compresor identidad; LSP tiene
+`zero=False`, CountSketch y planificación FCFS/LCFS explícita. Estado y
+evidencia actualizados en `docs/VALIDACION_LOCAL.md`.

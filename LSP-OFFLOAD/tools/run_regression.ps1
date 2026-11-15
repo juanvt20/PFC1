@@ -1,12 +1,12 @@
 param(
-    [Parameter(Mandatory=$true)][ValidateSet('moments','scheduler')][string]$Suite,
+    [Parameter(Mandatory=$true)][ValidateSet('moments','scheduler','equivalence','gpt2')][string]$Suite,
     [Parameter(Mandatory=$true)][ValidateSet('original','adaptado')][string]$Source,
     [Parameter(Mandatory=$true)][ValidatePattern('^[a-zA-Z0-9_-]+$')][string]$RunId
 )
 $ErrorActionPreference = 'Stop'
 $taskRoot = Split-Path -Parent $PSScriptRoot
 $dockerExe = Join-Path $env:LOCALAPPDATA 'Programs/DockerDesktop/resources/bin/docker.exe'
-$testFile = if ($Suite -eq 'moments') { 'validate_moment_transport.py' } else { 'validate_scheduler_boundaries.py' }
+$testFile = @{ moments='validate_moment_transport.py'; scheduler='validate_scheduler_boundaries.py'; equivalence='validate_scheduler_equivalence.py'; gpt2='validate_gpt2_checkpointing.py' }[$Suite]
 $outDir = Join-Path $taskRoot "results/$RunId"
 $logFile = Join-Path $taskRoot "logs/$RunId.log"
 if ((Test-Path -LiteralPath $outDir) -or (Test-Path -LiteralPath $logFile)) {
