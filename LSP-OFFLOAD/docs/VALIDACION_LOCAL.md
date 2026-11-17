@@ -390,3 +390,79 @@ entre ejecuciones. Si hay fallo, el informe se rotula parcial y muestra
 solo los puntos disponibles. La sección LaTeX se entrega como fragmento,
 sin afirmar compilación del documento IEEE completo. Una trayectoria por
 método y5000 pasos no demuestran convergencia completa.
+
+## Diagnóstico acotado del fallo de main-v1
+
+Zero completó165 pasos y falló al entrar al forward166, mientras ejecutaba
+actualizaciones pendientes: `_update`, `para_offload_modules.py:129`.
+La aserción original comprueba NaN en delta antes de
+`torch.cuda.current_stream().wait_event(event)`. El evento corresponde a la
+copia H2D no bloqueante. La suma/item de esa aserción espera su propio stream,
+sin establecer la dependencia con la copia. Los contadores cgroup oom y
+oom_kill permanecieron0; el proceso salió con1. LSP no se inició.
+
+Se conservaron los43 archivos de main-v1, verificados por SHA256 antes y
+después del diagnóstico. Sus scripts snapshot y los hashes de referencias
+coinciden con el lanzamiento b69cfca. Se montó main-v1 como solo lectura.
+No se regeneraron parches activos, no se modificó upstream/STRONHOLD y no se
+repitieron descargas, instalaciones, compilaciones de kernels o suites generales.
+
+Los replays parten del checkpoint inicial y repiten únicamente166 pasos con
+la misma configuración, semilla, datos y gradient checkpointing. No cargan
+pesos como supuesta reanudación. Reutilizan la evaluación inicial guardada;
+no ejecutan otra evaluación completa, calibración ni entrenamiento LSP.
+
+| Evidencia | Resultado |
+| --- | --- |
+| `zero-nan-replay-baseline-01` |166 pasos; instrumentación detallada150–166; ningún NaN/±Inf observado;96 contadores terminan en166 |
+| `zero-nan-replay-observer-02` |166 pasos; sin escaneo de tensores durante entrenamiento para reducir perturbación; no reaparece la aserción |
+| `zero-nan-event-order-02` |Prueba dirigida: el código activo puede rechazar un delta CPU finito cuando su copia H2D sigue pendiente; después del evento el delta GPU es finito y coincide exactamente con CPU |
+| `zero-nan-replay-candidate-03` |Solo copia diagnóstica con propuesta0003;166 pasos,96 contadores166, sin valores no finitos en la ventana instrumentada |
+
+La prueba dirigida crea un buffer con NaN centinela y retrasa su copia H2D;
+es un control de orden, no un gradiente/modelo alterado del experimento.
+Con el parche, ocho actualizaciones con Adam CPU real conservan W/M/V y
+contadores idénticos al control serial, pesos float32 y bfloat16, atol0/rtol0.
+También rechaza NaN, +Inf y -Inf auténticos después de terminar la copia,
+sin modificar pesos. La aserción activa solo rechaza NaN y deja pasar ±Inf.
+El primer test dirigido (`event-order-01`) devolvió1 porque su criterio
+exigía el rechazo falso en la primera transferencia; apareció en la segunda.
+Se corrigió ese criterio a observarlo dentro de las ocho transferencias,
+sin ampliar tolerancias. Ambos informes y versiones del test se conservan.
+
+**Límite de atribución:** ninguno de los dos replays activos reprodujo el
+NaN del forward166. La instrumentación modifica tiempos/asignaciones, y
+las pérdidas de los replays no fueron bit a bit idénticas a las históricas,
+aunque conservaron configuración/semilla y los tres replays usaron idénticos
+lotes. No se asigna una causa a esas diferencias. El error de orden está
+demostrado y es consistente con el fallo original, pero no es prueba
+exclusiva de su causa histórica. El log original no permite recuperar el
+módulo concreto ni el elemento que contenía NaN. No se observó inestabilidad
+numérica en la ventana instrumentada ni se demostró otro fallo de reutilización
+de buffers. Los estados finitos observados no garantizan5000 pasos correctos.
+
+`trace.jsonl` registra etapa, paso de ejecución y de origen del gradiente,
+módulo/nombre, ID de operación, t, dtype/forma, direcciones y rangos completos
+con conteos NaN/+Inf/-Inf. Se observa gradiente GPU antes de D2H, gradiente CPU
+tras la espera original, M/V antes/después de Adam, buffer CPU transformado
+in-place de gradiente a delta, delta antes de H2D y tras la espera GPU, pesos
+y pérdida. Al detectar un fallo captura las colas/contadores y compara el
+delta GPU ya completado con CPU sin reintentar la actualización. No se
+guardan tensores completos de pesos, gradientes ni momentos.
+
+Los lotes reconstruidos165 y166 tienen índices de dataset base0
+`[30753,5294,41105,21185]` y `[21149,40568,15614,14917]`, formas4×256 y4×208.
+`batches.jsonl` guarda todos los IDs/hashes; los replays instrumentados
+conservan tokens/máscaras y estados RNG150–166. El main original no registró
+IDs: estos se reconstruyen usando su loader/split/semilla. Los rangos y
+resultados completos quedan en `configs/zero_nan_diagnosis.json` y en los
+directorios diagnósticos locales, sin sobrescribir main-v1.
+
+**Siguiente arreglo necesario:** integrar únicamente
+`adaptado/propuestas/0003-wait-before-validating-delta.patch` en una nueva
+revisión adaptada. Mueve la espera H2D y record_stream antes de la primera
+lectura y conserva una aserción `torch.isfinite(delta).all()`. No modifica
+datos ni fórmulas, no añade nan_to_num ni clipping, no cambia LR/precisión/epsilon,
+FCFS/LCFS o vaciados por iteración. `git apply --check` pasa contra la copia
+actual; el parche se probó en memoria/copia diagnóstica y **no se ha aplicado
+a la adaptación activa**. No se relanzaron5000 pasos ni se reanudó main-v1.

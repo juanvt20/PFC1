@@ -1,6 +1,6 @@
 # PFC1: LSP-Offload
 
-Estado al 14 de noviembre de 2026: **parches separados de momentos y planificador validados; ambos pilotos Medium completaron 100 pasos y evaluación**. LSP atravesó una recalibración real. GPT-2 Large falló por OOM de RAM en la inicialización de Zero (Docker exit137/OOMKilled); se aplicó el único descenso autorizado a Medium para ambos métodos. La comparación corta queda preparada, con CheckFreq1000. Véanse [adaptación y pruebas](adaptado/README.md), [registro de ejecuciones](docs/VALIDACION_LOCAL.md) y [resumen automático](configs/comparison_summary.json).
+Estado actual: **main-v1 se detuvo en Zero tras165 pasos por una aserción de NaN; LSP no se inició**. El diagnóstico acotado confirma una lectura de delta antes de esperar H2D y propone el parche0003, probado únicamente en copia diagnóstica. Los replays no repitieron el NaN histórico, por lo que no se atribuye su causa exclusiva sin evidencia. Se conservan los pilotos y las seis repeticiones previas. Véanse [diagnóstico concreto](configs/zero_nan_diagnosis.json), [registro de ejecuciones](docs/VALIDACION_LOCAL.md) y [comparación corta](configs/comparison_summary.json).
 
 La primera reproducción propuesta utiliza **RoBERTa-base + GLUE** para validar el aprendizaje de proyectores y **GPT-2 Large + Alpaca GPT-4** para validar offloading CPU y planificación por capas. DeepSeek-Coder-1.3B queda condicionado a memoria y corrección; 6.7B no cabe en la ruta original con 8 GB de VRAM.
 

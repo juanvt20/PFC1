@@ -79,3 +79,10 @@ configuración `configs/short_comparison.json` y activos fijados en
 Zero tiene `Scheduler(zero=True)` y compresor identidad; LSP tiene
 `zero=False`, CountSketch y planificación FCFS/LCFS explícita. Estado y
 evidencia actualizados en `docs/VALIDACION_LOCAL.md`.
+
+Tras el fallo de main-v1 se prepara, **sin aplicar a esta copia**, la propuesta
+`propuestas/0003-wait-before-validating-delta.patch`: esperar el evento H2D
+antes de leer delta y conservar una aserción reforzada con isfinite. No está
+en `patches/` ni se incorpora al preparador, para distinguirla de los dos
+parches activos. Prueba dirigida y replay limitado a166 pasos en
+`configs/zero_nan_diagnosis.json`; no habilita un relanzamiento largo.

@@ -1,0 +1,1003 @@
+{
+  "status": "implementation_race_confirmed_patch_proposed_not_applied",
+  "main_v1_commit": "b69cfcacde763687940d3b6a5ddca4881610afb8",
+  "main_v1_evidence_files": 43,
+  "main_v1_evidence_mismatches": [],
+  "validated_reference_hashes_unchanged": true,
+  "original_failure": {
+    "completed_steps": 165,
+    "failure_at_forward_step": 166,
+    "function": "para_offload_modules._update",
+    "line": 129,
+    "assertion": "torch.isnan(delta).sum().item() == 0",
+    "module_id": "not recoverable from original log",
+    "oom_evidence": "exit1, cgroup oom/oom_kill counters unchanged at0; user-reported Docker OOMKilled=false"
+  },
+  "confirmed_implementation_error": "_update reads delta in the assertion before waiting for its H2D completion event",
+  "original_occurrence_attribution": "consistent with proven read-before-ready defect, but original step166 assertion did not recur in either bounded baseline replay; not exclusive proof of historical cause",
+  "replays": [
+    {
+      "run_id": "zero-nan-replay-baseline-01",
+      "configuration": {
+        "variant": "baseline",
+        "trace_from": 150,
+        "max_steps": 166,
+        "original_plan_unchanged": true,
+        "scope": "bounded replay, not long training or a performance measurement",
+        "instrumentation": "full tensor ranges/finiteness from trace_from, initial weights, batch IDs/RNG, failure-only post-event inspection",
+        "caveat": "Observers change allocation and timing; exact failure iteration is not guaranteed for a race"
+      },
+      "status": "success",
+      "completed_steps": 166,
+      "adam_counter_values": [
+        166
+      ],
+      "adam_counter_count": 96,
+      "nonfinite_tensor_observations": 0,
+      "H2D_events_pending_at_update_entry": 1728,
+      "stage_ranges": {
+        "M_after_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.059875279664993286,
+          "maximum": 0.040781326591968536
+        },
+        "M_before_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.059875279664993286,
+          "maximum": 0.040781326591968536
+        },
+        "V_after_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": 1.3789039599893642e-17,
+          "maximum": 0.009168415330350399
+        },
+        "V_before_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": 1.3789039599893642e-17,
+          "maximum": 0.00917756836861372
+        },
+        "cpu_delta_after_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -7.430627738358453e-05,
+          "maximum": 6.814206426497549e-05
+        },
+        "cpu_delta_before_h2d": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -7.430627738358453e-05,
+          "maximum": 6.814206426497549e-05
+        },
+        "cpu_gradient_before_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.140625,
+          "maximum": 0.1318359375
+        },
+        "gpu_delta_after_update_wait": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -7.430627738358453e-05,
+          "maximum": 6.814206426497549e-05
+        },
+        "gpu_gradient_before_d2h": {
+          "observations": 1632,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.140625,
+          "maximum": 0.1318359375
+        },
+        "initial_weight": {
+          "observations": 96,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -19.0,
+          "maximum": 16.625
+        },
+        "loss_before_backward": {
+          "observations": 17,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": 0.94140625,
+          "maximum": 1.9140625
+        },
+        "weight_after_update": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -19.0,
+          "maximum": 16.625
+        }
+      },
+      "comparison_with_historical_losses": {
+        "compared_steps": 165,
+        "unequal_losses": 66,
+        "max_absolute_difference": 0.03125,
+        "first_differences": [
+          {
+            "step": 15,
+            "main_loss": 4.40625,
+            "replay_loss": 4.4375
+          },
+          {
+            "step": 18,
+            "main_loss": 3.578125,
+            "replay_loss": 3.5625
+          },
+          {
+            "step": 19,
+            "main_loss": 3.3125,
+            "replay_loss": 3.328125
+          }
+        ],
+        "interpretation": "same seed/configuration does not establish bitwise-identical trajectories; no cause assigned to these differences"
+      },
+      "command": {
+        "argv": [
+          "run",
+          "--name",
+          "pfc-lsp-zero-nan-replay-baseline-01",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\results\\scheduler-v3-main-v1,target=/work/results/scheduler-v3-main-v1,readonly",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\adaptado\\upstream,target=/work/adaptado/upstream,readonly",
+          "-e",
+          "HF_HUB_OFFLINE=1",
+          "-e",
+          "TRANSFORMERS_OFFLINE=1",
+          "-e",
+          "OMP_NUM_THREADS=14",
+          "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006",
+          "python",
+          "-u",
+          "tools/diagnose_zero.py",
+          "--run-id",
+          "zero-nan-replay-baseline-01",
+          "--variant",
+          "baseline",
+          "--trace-from",
+          "150",
+          "--max-steps",
+          "166"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-17T04:39:24.7398337Z",
+        "ended_utc": "2026-11-17T04:42:57.2072890Z",
+        "test_sha256": "290A18335C009E2CFB86E9DD4D9BB7603BC2DB32737139BAF1CCFD242FF95E84",
+        "log": "logs/zero-nan-replay-baseline-01.log"
+      }
+    },
+    {
+      "run_id": "zero-nan-replay-observer-02",
+      "configuration": {
+        "variant": "baseline",
+        "trace_from": 167,
+        "max_steps": 166,
+        "original_plan_unchanged": true,
+        "scope": "bounded replay, not long training or a performance measurement",
+        "instrumentation": "full tensor ranges/finiteness from trace_from, initial weights, batch IDs/RNG, failure-only post-event inspection",
+        "caveat": "Observers change allocation and timing; exact failure iteration is not guaranteed for a race"
+      },
+      "status": "success",
+      "completed_steps": 166,
+      "adam_counter_values": [
+        166
+      ],
+      "adam_counter_count": 96,
+      "nonfinite_tensor_observations": 0,
+      "H2D_events_pending_at_update_entry": 0,
+      "stage_ranges": {},
+      "comparison_with_historical_losses": {
+        "compared_steps": 165,
+        "unequal_losses": 64,
+        "max_absolute_difference": 0.03125,
+        "first_differences": [
+          {
+            "step": 8,
+            "main_loss": 4.75,
+            "replay_loss": 4.78125
+          },
+          {
+            "step": 9,
+            "main_loss": 5.21875,
+            "replay_loss": 5.25
+          },
+          {
+            "step": 13,
+            "main_loss": 4.3125,
+            "replay_loss": 4.34375
+          }
+        ],
+        "interpretation": "same seed/configuration does not establish bitwise-identical trajectories; no cause assigned to these differences"
+      },
+      "command": {
+        "argv": [
+          "run",
+          "--name",
+          "pfc-lsp-zero-nan-replay-observer-02",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\results\\scheduler-v3-main-v1,target=/work/results/scheduler-v3-main-v1,readonly",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\adaptado\\upstream,target=/work/adaptado/upstream,readonly",
+          "-e",
+          "HF_HUB_OFFLINE=1",
+          "-e",
+          "TRANSFORMERS_OFFLINE=1",
+          "-e",
+          "OMP_NUM_THREADS=14",
+          "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006",
+          "python",
+          "-u",
+          "tools/diagnose_zero.py",
+          "--run-id",
+          "zero-nan-replay-observer-02",
+          "--variant",
+          "baseline",
+          "--trace-from",
+          "167",
+          "--max-steps",
+          "166"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-17T04:46:11.1915405Z",
+        "ended_utc": "2026-11-17T04:48:48.0615635Z",
+        "test_sha256": "817749ED908879395C5C9FB9111A473F6FF4DFABE99CCD3FA5663578640EDA85",
+        "log": "logs/zero-nan-replay-observer-02.log"
+      }
+    },
+    {
+      "run_id": "zero-nan-replay-candidate-03",
+      "configuration": {
+        "variant": "candidate",
+        "trace_from": 150,
+        "max_steps": 166,
+        "original_plan_unchanged": true,
+        "scope": "bounded replay, not long training or a performance measurement",
+        "instrumentation": "full tensor ranges/finiteness from trace_from, initial weights, batch IDs/RNG, failure-only post-event inspection",
+        "caveat": "Observers change allocation and timing; exact failure iteration is not guaranteed for a race"
+      },
+      "status": "success",
+      "completed_steps": 166,
+      "adam_counter_values": [
+        166
+      ],
+      "adam_counter_count": 96,
+      "nonfinite_tensor_observations": 0,
+      "H2D_events_pending_at_update_entry": 1728,
+      "stage_ranges": {
+        "M_after_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.06174345687031746,
+          "maximum": 0.04771741107106209
+        },
+        "M_before_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.06174345687031746,
+          "maximum": 0.04771741107106209
+        },
+        "V_after_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": 1.4012982207130124e-17,
+          "maximum": 0.00919728260487318
+        },
+        "V_before_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": 1.4012982207130124e-17,
+          "maximum": 0.00920647382736206
+        },
+        "cpu_delta_after_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.00011107742466265336,
+          "maximum": 0.00011012748291250318
+        },
+        "cpu_delta_before_h2d": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.00011107742466265336,
+          "maximum": 0.00011012748291250318
+        },
+        "cpu_gradient_before_adam": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.2578125,
+          "maximum": 0.310546875
+        },
+        "gpu_delta_after_update_wait": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.00011107742466265336,
+          "maximum": 0.00011012748291250318
+        },
+        "gpu_gradient_before_d2h": {
+          "observations": 1632,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -0.2578125,
+          "maximum": 0.310546875
+        },
+        "initial_weight": {
+          "observations": 96,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -19.0,
+          "maximum": 16.625
+        },
+        "loss_before_backward": {
+          "observations": 17,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": 0.9375,
+          "maximum": 1.90625
+        },
+        "weight_after_update": {
+          "observations": 1728,
+          "nan": 0,
+          "positive_inf": 0,
+          "negative_inf": 0,
+          "minimum": -19.0,
+          "maximum": 16.625
+        }
+      },
+      "comparison_with_historical_losses": {
+        "compared_steps": 165,
+        "unequal_losses": 73,
+        "max_absolute_difference": 0.03125,
+        "first_differences": [
+          {
+            "step": 13,
+            "main_loss": 4.3125,
+            "replay_loss": 4.34375
+          },
+          {
+            "step": 15,
+            "main_loss": 4.40625,
+            "replay_loss": 4.4375
+          },
+          {
+            "step": 16,
+            "main_loss": 4.03125,
+            "replay_loss": 4.0625
+          }
+        ],
+        "interpretation": "same seed/configuration does not establish bitwise-identical trajectories; no cause assigned to these differences"
+      },
+      "command": {
+        "argv": [
+          "run",
+          "--name",
+          "pfc-lsp-zero-nan-replay-candidate-03",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\results\\scheduler-v3-main-v1,target=/work/results/scheduler-v3-main-v1,readonly",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\adaptado\\upstream,target=/work/adaptado/upstream,readonly",
+          "-e",
+          "HF_HUB_OFFLINE=1",
+          "-e",
+          "TRANSFORMERS_OFFLINE=1",
+          "-e",
+          "OMP_NUM_THREADS=14",
+          "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006",
+          "python",
+          "-u",
+          "tools/diagnose_zero.py",
+          "--run-id",
+          "zero-nan-replay-candidate-03",
+          "--variant",
+          "candidate",
+          "--trace-from",
+          "150",
+          "--max-steps",
+          "166"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-17T04:55:12.0497234Z",
+        "ended_utc": "2026-11-17T04:58:58.7329880Z",
+        "test_sha256": "817749ED908879395C5C9FB9111A473F6FF4DFABE99CCD3FA5663578640EDA85",
+        "log": "logs/zero-nan-replay-candidate-03.log"
+      }
+    }
+  ],
+  "buffer_semantics": "CPU Adam changes its gradient buffer into delta in place: cpu_gradient_before_adam is that buffer before, cpu_delta_after_adam after. No sanitization or optimizer-formula changes.",
+  "mathematical_or_experimental_changes": [],
+  "main_v1_restarted": false,
+  "lsp_executed": false,
+  "batch_order_identical_across_replays": true,
+  "reconstructed_target_batches": [
+    {
+      "step": 165,
+      "dataset_indices": [
+        30753,
+        5294,
+        41105,
+        21185
+      ],
+      "hashes": {
+        "input_ids": "4257d13786547d666a0ecff0da420506310ec28cbd7a38604c162666e8f37e53",
+        "attention_mask": "55520801f89eb2b171717578148e0ddc41ba7e10b5aab0f44fbbf926d16f3537"
+      },
+      "shapes": {
+        "input_ids": [
+          4,
+          256
+        ],
+        "attention_mask": [
+          4,
+          256
+        ]
+      }
+    },
+    {
+      "step": 166,
+      "dataset_indices": [
+        21149,
+        40568,
+        15614,
+        14917
+      ],
+      "hashes": {
+        "input_ids": "2c8ddb907ac63788a8eb384c146ab5a5476d47549ac77af1e1db7201527e66ed",
+        "attention_mask": "8b5c8dcad718b42244b91245bc9ce7409acef7201909f12f46652045bfc30cc7"
+      },
+      "shapes": {
+        "input_ids": [
+          4,
+          208
+        ],
+        "attention_mask": [
+          4,
+          208
+        ]
+      }
+    }
+  ],
+  "batch_evidence": "Dataset indices are zero-based. Token tensors and RNG states for150..166 are local in baseline-01 and candidate-03; no weights/gradients/moments dumped. Original main-v1 did not log batch IDs; these are reconstructed from its identical loader/seed.",
+  "directed_test": {
+    "scope": "controlled delayed H2D; stale NaN is a buffer sentinel, not a model gradient",
+    "source_sha256": "d423634578e0c77e7a2f3507d03bfc60136a394254ac62340dc95615b652f1cc",
+    "patch_sha256": "92711e0626a2278ab1e27e27c4b5082268db75792e4ea6f914d53c94d0b59edc",
+    "cases": [
+      {
+        "test": "finite_cpu_delta_delayed_h2d",
+        "variant": "baseline",
+        "weight_dtype": "torch.float32",
+        "passed": true,
+        "records": [
+          {
+            "step": 1,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 1,
+            "serial_t": 1
+          },
+          {
+            "step": 2,
+            "event_ready_before": false,
+            "rejected": true,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 2,
+            "serial_t": 2
+          }
+        ]
+      },
+      {
+        "test": "finite_cpu_delta_delayed_h2d",
+        "variant": "candidate",
+        "weight_dtype": "torch.float32",
+        "passed": true,
+        "records": [
+          {
+            "step": 1,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 1,
+            "serial_t": 1
+          },
+          {
+            "step": 2,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 2,
+            "serial_t": 2
+          },
+          {
+            "step": 3,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 3,
+            "serial_t": 3
+          },
+          {
+            "step": 4,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 4,
+            "serial_t": 4
+          },
+          {
+            "step": 5,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 5,
+            "serial_t": 5
+          },
+          {
+            "step": 6,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 6,
+            "serial_t": 6
+          },
+          {
+            "step": 7,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 7,
+            "serial_t": 7
+          },
+          {
+            "step": 8,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 8,
+            "serial_t": 8
+          }
+        ]
+      },
+      {
+        "test": "finite_cpu_delta_delayed_h2d",
+        "variant": "baseline",
+        "weight_dtype": "torch.bfloat16",
+        "passed": true,
+        "records": [
+          {
+            "step": 1,
+            "event_ready_before": false,
+            "rejected": true,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 1,
+            "serial_t": 1
+          }
+        ]
+      },
+      {
+        "test": "finite_cpu_delta_delayed_h2d",
+        "variant": "candidate",
+        "weight_dtype": "torch.bfloat16",
+        "passed": true,
+        "records": [
+          {
+            "step": 1,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 1,
+            "serial_t": 1
+          },
+          {
+            "step": 2,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 2,
+            "serial_t": 2
+          },
+          {
+            "step": 3,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 3,
+            "serial_t": 3
+          },
+          {
+            "step": 4,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 4,
+            "serial_t": 4
+          },
+          {
+            "step": 5,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 5,
+            "serial_t": 5
+          },
+          {
+            "step": 6,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 6,
+            "serial_t": 6
+          },
+          {
+            "step": 7,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 7,
+            "serial_t": 7
+          },
+          {
+            "step": 8,
+            "event_ready_before": false,
+            "rejected": false,
+            "settled_delta_finite": true,
+            "settled_delta_matches_cpu": true,
+            "weight_matches_serial": true,
+            "M_matches_serial": true,
+            "V_matches_serial": true,
+            "adam_t": 8,
+            "serial_t": 8
+          }
+        ]
+      },
+      {
+        "test": "completed_h2d_nonfinite_payload",
+        "variant": "baseline",
+        "payload": "nan",
+        "rejected": true,
+        "weight_unchanged": true,
+        "gpu_delta": {
+          "shape": [
+            32,
+            32
+          ],
+          "dtype": "torch.float32",
+          "device": "cuda:0",
+          "numel": 1024,
+          "nan": 1024,
+          "posinf": 0,
+          "neginf": 0,
+          "finite": false,
+          "minimum": null,
+          "maximum": null,
+          "data_ptr": 21554532352
+        },
+        "passed": true
+      },
+      {
+        "test": "completed_h2d_nonfinite_payload",
+        "variant": "candidate",
+        "payload": "nan",
+        "rejected": true,
+        "weight_unchanged": true,
+        "gpu_delta": {
+          "shape": [
+            32,
+            32
+          ],
+          "dtype": "torch.float32",
+          "device": "cuda:0",
+          "numel": 1024,
+          "nan": 1024,
+          "posinf": 0,
+          "neginf": 0,
+          "finite": false,
+          "minimum": null,
+          "maximum": null,
+          "data_ptr": 21554536448
+        },
+        "passed": true
+      },
+      {
+        "test": "completed_h2d_nonfinite_payload",
+        "variant": "baseline",
+        "payload": "positive_inf",
+        "rejected": false,
+        "weight_unchanged": false,
+        "gpu_delta": {
+          "shape": [
+            32,
+            32
+          ],
+          "dtype": "torch.float32",
+          "device": "cuda:0",
+          "numel": 1024,
+          "nan": 0,
+          "posinf": 1024,
+          "neginf": 0,
+          "finite": false,
+          "minimum": null,
+          "maximum": null,
+          "data_ptr": 21554528256
+        },
+        "passed": true
+      },
+      {
+        "test": "completed_h2d_nonfinite_payload",
+        "variant": "candidate",
+        "payload": "positive_inf",
+        "rejected": true,
+        "weight_unchanged": true,
+        "gpu_delta": {
+          "shape": [
+            32,
+            32
+          ],
+          "dtype": "torch.float32",
+          "device": "cuda:0",
+          "numel": 1024,
+          "nan": 0,
+          "posinf": 1024,
+          "neginf": 0,
+          "finite": false,
+          "minimum": null,
+          "maximum": null,
+          "data_ptr": 21554532352
+        },
+        "passed": true
+      },
+      {
+        "test": "completed_h2d_nonfinite_payload",
+        "variant": "baseline",
+        "payload": "negative_inf",
+        "rejected": false,
+        "weight_unchanged": false,
+        "gpu_delta": {
+          "shape": [
+            32,
+            32
+          ],
+          "dtype": "torch.float32",
+          "device": "cuda:0",
+          "numel": 1024,
+          "nan": 0,
+          "posinf": 0,
+          "neginf": 1024,
+          "finite": false,
+          "minimum": null,
+          "maximum": null,
+          "data_ptr": 21554536448
+        },
+        "passed": true
+      },
+      {
+        "test": "completed_h2d_nonfinite_payload",
+        "variant": "candidate",
+        "payload": "negative_inf",
+        "rejected": true,
+        "weight_unchanged": true,
+        "gpu_delta": {
+          "shape": [
+            32,
+            32
+          ],
+          "dtype": "torch.float32",
+          "device": "cuda:0",
+          "numel": 1024,
+          "nan": 0,
+          "posinf": 0,
+          "neginf": 1024,
+          "finite": false,
+          "minimum": null,
+          "maximum": null,
+          "data_ptr": 21554528256
+        },
+        "passed": true
+      }
+    ],
+    "state_tolerance": {
+      "atol": 0,
+      "rtol": 0
+    },
+    "passed": true
+  },
+  "directed_test_command": {
+    "argv": [
+      "run",
+      "--name",
+      "pfc-lsp-zero-nan-event-order-02",
+      "--pull=never",
+      "--network",
+      "none",
+      "--gpus",
+      "all",
+      "--mount",
+      "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+      "--mount",
+      "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\results\\scheduler-v3-main-v1,target=/work/results/scheduler-v3-main-v1,readonly",
+      "--mount",
+      "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+      "--mount",
+      "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\adaptado\\upstream,target=/work/adaptado/upstream,readonly",
+      "-e",
+      "HF_HUB_OFFLINE=1",
+      "-e",
+      "TRANSFORMERS_OFFLINE=1",
+      "-e",
+      "OMP_NUM_THREADS=14",
+      "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006",
+      "python",
+      "-u",
+      "tools/test_update_event_order.py",
+      "--run-id",
+      "zero-nan-event-order-02"
+    ],
+    "exit_code": 0,
+    "started_utc": "2026-11-17T04:50:45.1224381Z",
+    "ended_utc": "2026-11-17T04:50:53.1227065Z",
+    "test_sha256": "BFEC3E5F6D955420843736E132972A3F7F7CD51C51C1922FF987C66604844210",
+    "log": "logs/zero-nan-event-order-02.log"
+  },
+  "directed_test_v1_note": "First test run returned exit1 because its oracle required false rejection on the first copy; baseline rejected on the second. Candidate cases already passed. The corrected oracle requires an observed rejection within eight controlled transfers. Both reports/source versions retained.",
+  "proposed_patch": {
+    "path": "adaptado\\propuestas\\0003-wait-before-validating-delta.patch",
+    "sha256": "92711e0626a2278ab1e27e27c4b5082268db75792e4ea6f914d53c94d0b59edc",
+    "active_adaptation_modified": false,
+    "changes": [
+      "wait for H2D event before the first tensor read",
+      "record compute-stream lifetime before validation",
+      "retain assertion and strengthen it to isfinite (NaN and both infinities)"
+    ],
+    "preserved": [
+      "FCFS/LCFS scheduling",
+      "overlap without global drain per iteration",
+      "LR",
+      "precision",
+      "epsilon",
+      "clipping configuration",
+      "CPU Adam and projector formulas"
+    ]
+  },
+  "next_fix": "Integrate only the tested _update ordering/finite-check patch into a new adapted revision; do not resume main-v1 or start long training as part of this diagnosis."
+}
