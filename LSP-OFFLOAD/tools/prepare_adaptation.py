@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 from scheduler_patch import apply_scheduler_patch
+from delta_patch import apply_delta_patch
 
 root = Path(__file__).resolve().parents[1]
 source = root / 'original/upstream'
@@ -45,13 +46,15 @@ assert modified[filename].count(old) == 1
 modified[filename] = modified[filename].replace(old, new)
 
 stage_one = dict(modified)
-modified = apply_scheduler_patch(stage_one)
+stage_two = apply_scheduler_patch(stage_one)
+modified = dict(stage_two)
+modified['para_offload_modules.py'] = apply_delta_patch(stage_two['para_offload_modules.py'])
 
-# Only upgrade recognized patch-1 bytes, never overwrite unrelated local edits.
+# Only upgrade recognized patch-1/2 bytes, never overwrite unrelated local edits.
 if target.exists():
     for path, raw in modified.items():
         dst = target / path
-        if dst.exists() and dst.read_bytes() not in (raw, stage_one[path]):
+        if dst.exists() and dst.read_bytes() not in (raw, stage_one[path], stage_two[path]):
             raise RuntimeError('Existing adapted file differs; inspect before continuing: ' + path)
 
 changed = []
@@ -66,7 +69,8 @@ patchdir = root / 'adaptado/patches'
 patchdir.mkdir(exist_ok=True)
 for patchname, before, after in [
         ('0001-preserve-transported-moments.patch', originals, stage_one),
-        ('0002-drain-pending-operations.patch', stage_one, modified)]:
+        ('0002-drain-pending-operations.patch', stage_one, stage_two),
+        ('0003-wait-before-validating-delta.patch', stage_two, modified)]:
     patch = ''.join(''.join(difflib.unified_diff(before[p].decode('utf-8').splitlines(keepends=True),
                   after[p].decode('utf-8').splitlines(keepends=True), fromfile='a/'+p, tofile='b/'+p))
                   for p in before if before[p] != after[p])

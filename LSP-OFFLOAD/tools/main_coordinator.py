@@ -8,6 +8,7 @@ import subprocess
 import sys
 import time
 import traceback
+from main_initial_reuse import reuse_initial
 
 p = argparse.ArgumentParser()
 p.add_argument('--campaign-dir', required=True)
@@ -47,6 +48,12 @@ try:
     for method in plan['method_order']:
         if (campaign/method).exists():
             raise RuntimeError('Stage output already exists; refusing overwrite or unvalidated resume: '+method)
+        if method == 'initial' and plan.get('initial_evaluation_reuse'):
+            status.update(state='validating_initial_reuse', stage='initial'); persist()
+            status['initial_reuse'] = reuse_initial(Path('/work'), campaign, plan)
+            status['completed'].append('initial'); persist()
+            print('Reused verified full initial evaluation; no training RNG consumed', flush=True)
+            continue
         argv = [sys.executable, '-u', str(campaign/'code/run_main.py'),
                 '--campaign-dir', str(campaign), '--method', method]
         status.update(state='running', stage=method, argv=argv)

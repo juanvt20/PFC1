@@ -466,3 +466,47 @@ datos ni fórmulas, no añade nan_to_num ni clipping, no cambia LR/precisión/ep
 FCFS/LCFS o vaciados por iteración. `git apply --check` pasa contra la copia
 actual; el parche se probó en memoria/copia diagnóstica y **no se ha aplicado
 a la adaptación activa**. No se relanzaron5000 pasos ni se reanudó main-v1.
+
+## Integración autorizada del parche 0003 y main-v2 (2026-11-17)
+
+Con la nueva autorización se integra únicamente el candidato ya probado en
+la copia compartida por Zero/LSP. SHA256 del parche:
+`92711e0626a2278ab1e27e27c4b5082268db75792e4ea6f914d53c94d0b59edc`;
+del módulo adaptado completo:
+`ddbf318fc2f444339fcae7bfa32c86e3f4d684feac77040dfb51a1e84684b0f6`.
+Coincide byte por byte con `zero-nan-replay-candidate-03`.
+Se corrige el defecto demostrado de orden de lectura, sin atribución
+exclusiva del fallo histórico. No cambian fórmulas, LR, precisión, epsilon,
+FCFS/LCFS, checkpointing ni solapamiento. Los 43 archivos de main-v1
+conservan sus hashes del manifiesto diagnóstico. No se modifican el
+diagnóstico, el upstream ni STRONHOLD; tampoco se ejecuta el preparador.
+
+Única regresión GPU nueva:
+`& ./LSP-OFFLOAD/tools/run_zero_diagnostic.ps1 -Suite order-test -RunId zero-nan-integrated-order-03`.
+Pasa 10 casos sobre la función integrada. La transferencia H2D retrasada
+demuestra el defecto en el control anterior; la versión integrada completa
+ocho actualizaciones por dtype float32/bfloat16 con W/M/V y contadores
+exactos respecto al control serial (atol=rtol=0). Rechaza NaN y ambos signos
+de infinito después de la copia, sin modificar pesos. Se reutilizan las
+pruebas de checkpointing y el replay del candidato idéntico, sin repetirlos.
+
+`configs/main_experiment_v2.json` conserva el experimento de main-v1:
+GPT-2 Medium, 5000 pasos por método, batch4, longitud512, semilla2026,
+LR1e-4, pesos bfloat16, Adam CPU float32/epsilon1e-4, evaluaciones completas
+de 5185 ejemplos cada1000 pasos y comprobación de proyectores cada1000.
+Ambas rutas cargan el checkpoint preentrenado; no se reanudan los 165 pasos.
+La evaluación inicial se reutiliza únicamente al verificar hashes reales
+de modelo/tokenizador/datos, split, protocolo y runner idéntico. Su forward
+en eval no llama a `_update`. El evaluador inicial fue un proceso separado;
+cada nuevo proceso de entrenamiento conserva sus reinicios de semilla
+antes del modelo y antes del iterador. La reutilización no consume su RNG.
+La duración de esa evaluación pertenece a main-v1, no al tiempo de main-v2.
+
+Las seis repeticiones cortas siguen identificadas con `7a57c3b`, anteriores
+al parche0003: no caracterizan automáticamente el rendimiento corregido.
+Los nuevos CSV/JSON, figuras y LaTeX distinguen esa procedencia. La campaña
+se ejecuta en un contenedor desacoplado, una sola vez, con rechazo de
+duplicados, logs incrementales y parada ante el primer fallo sin reintentos.
+Consulta: `& ./LSP-OFFLOAD/tools/status_main.ps1 -Campaign scheduler-v3-main-v2`.
+Artefactos: `results/scheduler-v3-main-v2/`; informe automático al terminar
+en `report/`, indicando si las mediciones son completas o parciales.

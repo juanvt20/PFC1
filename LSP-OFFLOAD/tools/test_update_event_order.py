@@ -18,6 +18,7 @@ from state import State
 from zero_nan_trace import statistics
 torch.set_num_threads(14)
 source=Path(off.__file__).read_bytes()
+integrated=b'                assert torch.isfinite(delta).all().item()' in source
 old=b'''                assert torch.isnan(delta).sum().item() == 0
                 torch.cuda.current_stream().wait_event(event)
                 delta.record_stream(torch.cuda.current_stream())
@@ -26,17 +27,28 @@ new=b'''                torch.cuda.current_stream().wait_event(event)
                 delta.record_stream(torch.cuda.current_stream())
                 assert torch.isfinite(delta).all().item()
 '''
-assert source.count(old)==1
-patched=source.replace(old,new)
-patch=''.join(difflib.unified_diff(source.decode().splitlines(True),patched.decode().splitlines(True),
+baseline_source=source.replace(new,old) if integrated else source
+assert baseline_source.count(old)==1
+assert hashlib.sha256(baseline_source).hexdigest()=='d423634578e0c77e7a2f3507d03bfc60136a394254ac62340dc95615b652f1cc'
+patched=baseline_source.replace(old,new)
+assert patched==(root/'results/zero-nan-replay-candidate-03/candidate-para_offload_modules.py').read_bytes()
+patch=''.join(difflib.unified_diff(baseline_source.decode().splitlines(True),patched.decode().splitlines(True),
     fromfile='a/para_offload_modules.py',tofile='b/para_offload_modules.py'))
 (out/'candidate.patch').write_text(patch)
 function=inspect.getsource(off._update)
-assert function.encode().count(old)==1
 namespace={}
-exec(compile(function.encode().replace(old,new),'<candidate-update>','exec'),off.__dict__,namespace)
-candidate=namespace['_update']
+if integrated:
+    assert source==patched and function.encode().count(new)==1
+    exec(compile(function.encode().replace(new,old),'<pre-patch-negative-control>','exec'),off.__dict__,namespace)
+    baseline=namespace['_update']
+    candidate=off._update
+else:
+    assert function.encode().count(old)==1
+    exec(compile(function.encode().replace(old,new),'<candidate-update>','exec'),off.__dict__,namespace)
+    baseline=off._update
+    candidate=namespace['_update']
 report=dict(scope='controlled delayed H2D; stale NaN is a buffer sentinel, not a model gradient',
+            integrated_function_tested=integrated, candidate_identity_verified=True,
             source_sha256=hashlib.sha256(source).hexdigest(),patch_sha256=hashlib.sha256(patch.encode()).hexdigest(),
             cases=[],state_tolerance={'atol':0,'rtol':0})
 
@@ -54,7 +66,7 @@ def payload(source_cpu,delay):
 
 
 for dtype in [torch.float32,torch.bfloat16]:
-    for name,update in [('baseline',off._update),('candidate',candidate)]:
+    for name,update in [('baseline',baseline),('candidate',candidate)]:
         optim=off.Adam(lr=1e-4,device='cpu',dtype=torch.float32);optim.init((32,32))
         serial=off.Adam(lr=1e-4,device='cpu',dtype=torch.float32);serial.init((32,32))
         weight=torch.zeros((32,32),device='cuda',dtype=dtype)
@@ -86,7 +98,7 @@ for dtype in [torch.float32,torch.bfloat16]:
 
 for bad,label in [(float('nan'),'nan'),(float('inf'),'positive_inf'),(float('-inf'),'negative_inf')]:
     source_cpu=torch.full((32,32),bad,dtype=torch.float32,pin_memory=True)
-    for name,update in [('baseline',off._update),('candidate',candidate)]:
+    for name,update in [('baseline',baseline),('candidate',candidate)]:
         weight=torch.zeros((32,32),device='cuda')
         ctx,event,delta,stream=payload(source_cpu,False);event.synchronize()
         rejected=False

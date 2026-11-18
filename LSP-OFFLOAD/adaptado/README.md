@@ -80,9 +80,16 @@ Zero tiene `Scheduler(zero=True)` y compresor identidad; LSP tiene
 `zero=False`, CountSketch y planificación FCFS/LCFS explícita. Estado y
 evidencia actualizados en `docs/VALIDACION_LOCAL.md`.
 
-Tras el fallo de main-v1 se prepara, **sin aplicar a esta copia**, la propuesta
-`propuestas/0003-wait-before-validating-delta.patch`: esperar el evento H2D
-antes de leer delta y conservar una aserción reforzada con isfinite. No está
-en `patches/` ni se incorpora al preparador, para distinguirla de los dos
-parches activos. Prueba dirigida y replay limitado a166 pasos en
-`configs/zero_nan_diagnosis.json`; no habilita un relanzamiento largo.
+Tras la autorización posterior se integra exactamente
+`patches/0003-wait-before-validating-delta.patch`: esperar el evento H2D
+antes de leer delta y conservar una aserción reforzada con isfinite.
+Se mantiene intacta la propuesta y toda su evidencia diagnóstica. El módulo
+activo coincide byte por byte con el candidato validado de
+`zero-nan-replay-candidate-03`. Corrige un defecto demostrado de orden de
+lectura; no demuestra que explique exclusivamente el fallo histórico.
+La regresión dirigida `zero-nan-integrated-order-03` pasa 10 casos sobre
+la función integrada: W/M/V y contadores exactos (atol=rtol=0), transferencia
+H2D retrasada y rechazo de NaN/+Inf/-Inf reales. No se repiten replays.
+El preparador incorpora el tercer parche para futuras reconstrucciones;
+no se ejecutó ni se regeneraron los dos parches anteriores al integrarlo.
+`configs/main_experiment_v2.json` fija la nueva campaña autorizada.

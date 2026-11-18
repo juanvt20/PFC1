@@ -37,6 +37,7 @@ def csv_write(name, rows):
 
 
 initial = read(campaign/'initial/summary.json')
+initial_reuse = read(campaign/'initial/reuse.json')
 initial_eval = initial['evaluations'][0] if initial and initial.get('evaluations') else None
 measurements, evals, intervals = [], [], []
 states = {}
@@ -78,7 +79,8 @@ for run in reuse['runs']:
     w = s['performance_window']
     micro.append(dict(run_id=s['run_id'], method=s['method'], iterations=w['iterations'], warmup=5,
         seconds=w['seconds'], seconds_per_iteration=w['seconds_per_iteration'],
-        iterations_per_second=w['iterations_per_second'], reused=True))
+        iterations_per_second=w['iterations_per_second'], reused=True,
+        code_commit=plan['reuse']['performance_code_commit'], version_scope='historical_before_patch_0003'))
 csv_write('reused_microbenchmarks.csv', micro)
 
 plt.rcParams.update({'font.size':8, 'axes.labelsize':8, 'legend.fontsize':7,
@@ -140,14 +142,19 @@ else: plt.close(fig)
 complete = len(states)==2 and all(s['status']=='success' and s['completed_steps']==5000 for s in states.values())
 report = dict(campaign=plan['campaign'], status='complete' if complete else 'partial_or_failed',
     configuration=plan, launch=read(campaign/'launch.json'), common_initial=initial_eval,
+    initial_evaluation_reuse=initial_reuse,
     main_measurements=measurements, evaluations=evals, training_intervals=intervals,
-    reused_microbenchmark_statistics=reuse['performance'], generated_figures=generated,
+    reused_microbenchmark_statistics=reuse['performance'],
+    microbenchmark_version_scope='Historical commit '+plan['reuse']['performance_code_commit']+' before patch 0003; not measurements of this corrected version',
+    generated_figures=generated,
     limitations=['One main trajectory per method; no estimate of quality dispersion across runs',
         '5000 steps do not establish complete convergence',
         'Medium replaces paper Large after observed RAM OOM; Zero LR1e-4 differs from paper1e-5',
         'Perplexity is exp(mean(batch loss)), with original prompt/padding semantics',
         'Plot time is measured since instrumentation start, includes calibration/evaluation; imports outside this clock appear in external_stage_s',
         'Initial evaluation shared once, plotted at step/time0; its duration is recorded separately',
+        'Reused initial evaluation duration belongs to main-v1, not the wall time of this campaign',
+        'Six short microbenchmarks precede patch 0003; their dispersion and speed do not characterize the corrected code',
         'RAM sampled every second; CUDA allocated/reserved is not total device memory',
         'Final weights are not an exact-resume training checkpoint'])
 (output/'results.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
@@ -164,11 +171,14 @@ tex = [r'\section{Resultados de LSP-Offload frente a Zero-Offload}',
        r'El descenso desde GPT-2 Large responde al OOM de RAM registrado en la inicialización de Zero. '
        r'La tasa de aprendizaje es $10^{-4}$ para ambos métodos, según el script publicado; el artículo indica $10^{-5}$ para Zero '
        r'(p.~11, Instruction Fine-tuning on Alpaca). LSP usa $d=512$, $r=8$, umbral 0.8 y comprobación cada 1000 pasos; el artículo indica umbral 0.5. '
-       r'Se mantienen las dos correcciones autorizadas de momentos y planificación, sin cambiar las demás fórmulas.',
+       r'Se mantienen las correcciones autorizadas de momentos y planificación y se integra el parche 0003: '
+       r'esperar H2D antes de validar delta, conservando el rechazo de NaN e infinitos. Corrige un defecto demostrado de orden de lectura; '
+       r'no demuestra que este explique exclusivamente el fallo histórico de main-v1. Las fórmulas permanecen intactas.',
        r'\subsection{Rendimiento medido}',
-       r'Las seis repeticiones cortas previas se reutilizan: cinco pasos de calentamiento y veinte medidos por repetición, tres por método. '
+       r'Las seis repeticiones cortas pertenecen a la versión histórica \texttt{7a57c3b}, anterior al parche 0003; '
+       r'no miden el rendimiento del código corregido. Se conservan como referencia: cinco pasos de calentamiento y veinte medidos por repetición, tres por método. '
        r'La dispersión siguiente es la desviación estándar muestral entre ejecuciones; no procede de fluctuaciones de una curva.',
-       r'\begin{table}[t]\centering\small\setlength{\tabcolsep}{3pt}\caption{Microbenchmarks reutilizados: mediana y desviación estándar (DE).}\label{tab:lsp-micro}',
+       r'\begin{table}[t]\centering\small\setlength{\tabcolsep}{3pt}\caption{Microbenchmarks históricos anteriores al parche 0003: mediana y desviación estándar (DE).}\label{tab:lsp-micro}',
        r'\begin{tabular}{lrrrr}\hline Método & Med. s/it & DE s/it & Med. it/s & DE it/s \\\hline']
 for method in ['zero','lsp']:
     m=reuse['performance'][method]
@@ -181,12 +191,21 @@ if measurements:
             r'\begin{tabular}{lrrrr}\hline Método & Pasos & Entr. (s) & Cal. (s) & Eval. (s) \\\hline']
     for m in measurements:
         tex.append(f"{labels[m['method']]} & {m['completed_steps']} & {f(m['training_s'],1)} & {f(m['calibration_s'],1)} & {f(m['evaluation_s'],1)} "+r'\\')
+    tex += [r'\hline\end{tabular}\end{table}',
+            r'\begin{table}[t]\centering\small\setlength{\tabcolsep}{3pt}\caption{Versión corregida: rendimiento medio del entrenamiento y tiempo total externo por método.}\label{tab:lsp-main-rate}',
+            r'\begin{tabular}{lrrr}\hline Método & s/it & it/s & Total (s) \\\hline']
+    for m in measurements:
+        tex.append(f"{labels[m['method']]} & {f(m['seconds_per_iteration'])} & {f(m['iterations_per_second'])} & {f(m['external_stage_s'],1)} "+r'\\')
     tex += [r'\hline\end{tabular}\end{table}',r'\subsection{Calidad observada}',
             r'La perplexity conserva la definición del evaluador original: exponencial de la media de pérdidas por lote, '
             r'sin sustituirla por una media ponderada por tokens ni enmascarar de nuevo prompt o padding. '
             r'Las evaluaciones periódicas usan los 5185 ejemplos completos.']
     if initial_eval:
         tex.append(f"La evaluación inicial común produjo pérdida {f(initial_eval['mean_batch_loss'],4)} y perplexity {f(initial_eval['perplexity'],4)}, en {f(initial_eval['seconds'],1)} s, contabilizados por separado.")
+        if initial_reuse:
+            tex.append(r'Esta evaluación completa se reutiliza de main-v1 tras verificar los hashes de checkpoint, tokenizador y datos, el split y el protocolo. '
+                       r'Su duración es histórica y no se añade al tiempo real de main-v2. Cada entrenamiento comienza desde el checkpoint preentrenado '
+                       r'en un proceso independiente con su semilla inicial; no se carga estado de entrenamiento de main-v1.')
     tex += [r'\begin{table}[t]\centering\small\setlength{\tabcolsep}{3pt}\caption{Última evaluación completa disponible.}\label{tab:lsp-main-quality}',
             r'\begin{tabular}{lrrr}\hline Método & Paso & Pérdida & Perplexity \\\hline']
     for m in measurements:

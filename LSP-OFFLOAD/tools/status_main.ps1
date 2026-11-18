@@ -1,8 +1,9 @@
+param([ValidatePattern('^scheduler-v3-main-v[0-9]+$')][string]$Campaign='scheduler-v3-main-v2')
 $ErrorActionPreference = 'Stop'
 $taskRoot = Split-Path -Parent $PSScriptRoot
 $dockerExe = Join-Path $env:LOCALAPPDATA 'Programs/DockerDesktop/resources/bin/docker.exe'
-$campaignDir = Join-Path $taskRoot 'results/scheduler-v3-main-v1'
-& $dockerExe inspect --format '{{json .State}}' 'pfc-lsp-scheduler-v3-main-v1'
+$campaignDir = Join-Path $taskRoot "results/$Campaign"
+& $dockerExe inspect --format '{{json .State}}' "pfc-lsp-$Campaign"
 if ($LASTEXITCODE -ne 0) { throw 'Campaign container not found; no new process was started.' }
 $statusPath = Join-Path $campaignDir 'status.json'
 if (Test-Path -LiteralPath $statusPath) {
@@ -11,7 +12,8 @@ if (Test-Path -LiteralPath $statusPath) {
     if ($status.stage) {
         $progressPath = Join-Path $campaignDir "$($status.stage)/progress.json"
         if (Test-Path -LiteralPath $progressPath) { Get-Content -Raw $progressPath }
-        Get-Content -LiteralPath (Join-Path $campaignDir "$($status.stage).log") -Tail 6
+        $logPath = Join-Path $campaignDir "$($status.stage).log"
+        if (Test-Path -LiteralPath $logPath) { Get-Content -LiteralPath $logPath -Tail 6 }
     }
 }
 Write-Output "Report directory: $campaignDir/report"
