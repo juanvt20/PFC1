@@ -1,0 +1,173 @@
+{
+  "timestamp_utc": "2026-11-13T03:29:10Z",
+  "scope": "offline_small_diagnostics_no_training",
+  "python": "3.11.13",
+  "torch": "2.7.1+cu128",
+  "cuda": "12.8",
+  "imports": {
+    "transformers": {
+      "ok": true,
+      "version": "4.44.2"
+    },
+    "datasets": {
+      "ok": true,
+      "version": "2.21.0"
+    },
+    "evaluate": {
+      "ok": true,
+      "version": "0.4.3"
+    },
+    "diskcache": {
+      "ok": true,
+      "version": "5.6.3"
+    },
+    "sklearn": {
+      "ok": true,
+      "version": "1.5.2"
+    },
+    "gradient_compressor": {
+      "ok": true,
+      "version": null
+    },
+    "para_offload_modules": {
+      "ok": true,
+      "version": null
+    },
+    "llm_finetuning": {
+      "ok": true,
+      "version": null
+    }
+  },
+  "kernels": [
+    {
+      "device": "cpu",
+      "step": 1,
+      "max_abs_errors": {
+        "delta": 1.7462298274040222e-10,
+        "m": 4.656612873077393e-10,
+        "v": 5.172751116333529e-12
+      },
+      "passed": true
+    },
+    {
+      "device": "cpu",
+      "step": 2,
+      "max_abs_errors": {
+        "delta": 2.561137080192566e-09,
+        "m": 9.313225746154785e-10,
+        "v": 1.0345502232667059e-11
+      },
+      "passed": true
+    },
+    {
+      "device": "cpu",
+      "step": 3,
+      "max_abs_errors": {
+        "delta": 2.0372681319713593e-09,
+        "m": 1.3969838619232178e-09,
+        "v": 1.546140993013978e-11
+      },
+      "passed": true
+    },
+    {
+      "device": "cuda",
+      "step": 1,
+      "max_abs_errors": {
+        "delta": 2.3283064365386963e-10,
+        "m": 4.656612873077393e-10,
+        "v": 5.201172825763933e-12
+      },
+      "passed": true
+    },
+    {
+      "device": "cuda",
+      "step": 2,
+      "max_abs_errors": {
+        "delta": 3.4924596548080444e-09,
+        "m": 9.313225746154785e-10,
+        "v": 1.0345502232667059e-11
+      },
+      "passed": true
+    },
+    {
+      "device": "cuda",
+      "step": 3,
+      "max_abs_errors": {
+        "delta": 3.14321368932724e-09,
+        "m": 1.3969838619232178e-09,
+        "v": 1.546140993013978e-11
+      },
+      "passed": true
+    }
+  ],
+  "algorithm_accepted": false,
+  "algorithm_blockers": [
+    "N01 epsilon discrepancy",
+    "N15 moments reset",
+    "N04 objective/first-fit mismatch",
+    "scheduler correctness pending"
+  ],
+  "environment": {
+    "gpu": "NVIDIA GeForce RTX 5050 Laptop GPU",
+    "capability": [
+      12,
+      0
+    ],
+    "vram_free_total_bytes": [
+      7405043712,
+      8546484224
+    ],
+    "cpu_count": 24,
+    "torch_threads": 2,
+    "interop_threads": 12,
+    "cpu_model": "13th Gen Intel(R) Core(TM) i7-13700HX",
+    "avx2": true,
+    "meminfo": [
+      "MemTotal:        7979996 kB",
+      "MemAvailable:    6521116 kB",
+      "SwapTotal:       2097152 kB",
+      "SwapFree:        2097152 kB"
+    ],
+    "memory.max": "max",
+    "memory.current": "1373429760",
+    "cpu.max": "max 100000",
+    "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Jan_15_19:20:09_PST_2025\nCuda compilation tools, release 12.8, V12.8.61\nBuild cuda_12.8.r12.8/compiler.35404655_0\n",
+    "c++": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+  },
+  "imports_ok": true,
+  "pinned_transfer": {
+    "bytes_each_direction": 1048576,
+    "pinned": true,
+    "equal": true,
+    "claim": "correctness_only_not_bandwidth_or_overlap"
+  },
+  "compressor": {
+    "binary_values": [
+      -0.5
+    ],
+    "expected_random_signs": false,
+    "columns_with_collisions": 81,
+    "projector_changed_on_second_fit": true,
+    "transformed_moments_before_init": {
+      "m_abs_sum": 24.344589233398438,
+      "v_abs_sum": 216.15328979492188
+    },
+    "second_fit_m_abs_sum": 0.0,
+    "second_fit_v_abs_sum": 0.0,
+    "interpretation": "moments must be inspected; zeros after second fit indicate reset, not preserved transport",
+    "diagnostic_config": {
+      "d": 8,
+      "r": 2,
+      "shape": [
+        16,
+        16
+      ],
+      "n_iter": 2,
+      "n_ft_iter": 0,
+      "threshold": -1,
+      "dtype": "float32",
+      "seed": 1234
+    }
+  },
+  "image_identity": "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006 [\"pfc-lsp-offload@sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006\"]"
+}

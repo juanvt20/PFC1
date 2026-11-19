@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-12",
+  "scope": "static_review_environment_not_user_laptop",
+  "upstream_commit": "d9dc92a32b7e4829116ba6abec17c280dfb548a4",
+  "python_for_parsing": "3.12.14",
+  "commands": [
+    "Python ast.parse on each recovered .py source",
+    "bash -n on each recovered .sh source",
+    "Git blob SHA-1 verification for each recovered source/configuration file"
+  ],
+  "verified_file_count": 44,
+  "hash_failures": [],
+  "syntax_checks": {
+    ".py": {
+      "count": 30,
+      "errors": []
+    },
+    ".sh": {
+      "count": 10,
+      "errors": []
+    }
+  },
+  "recovered_paths": [
+    "compress.py",
+    "data.py",
+    "gradient_compressor.py",
+    "kernels/fusedAdam.cpp",
+    "kernels/fusedAdam_cpu.cpp",
+    "kernels/fusedAdam_cuda.cu",
+    "kernels/setup.py",
+    "kernels/test.py",
+    "llm_finetuning.py",
+    "lora.py",
+    "lora_modules.py",
+    "offload_modules.py",
+    "para_offload_modules.py",
+    "scripts/draw_loss_code_1.3B.py",
+    "scripts/draw_loss_code_6.7B.py",
+    "scripts/draw_loss_gpt2_large.py",
+    "scripts/draw_loss_llama_3b.py",
+    "scripts/run-gpt2-large.sh",
+    "scripts/run-llama-3b.sh",
+    "scripts/run_glue.sh",
+    "simluation/example/finetune_deepseekcoder.py",
+    "simluation/example/finetune_deepseekcoder_galore.py",
+    "simluation/example/finetune_deepseekcoder_lora.py",
+    "simluation/example/run_sft_lsp.sh",
+    "simluation/example/run_sft_lsp_6.7b.sh",
+    "simluation/example/sft_main_lsp.py",
+    "simluation/example/train_full_parameters.sh",
+    "simluation/example/train_full_parameters_6.7b.sh",
+    "simluation/example/train_galore.sh",
+    "simluation/example/train_lora.sh",
+    "simluation/example/train_lora_6.7b.sh",
+    "simluation/lspoffload/__init__.py",
+    "simluation/lspoffload/compressor/__init__.py",
+    "simluation/lspoffload/compressor/compressor.py",
+    "simluation/lspoffload/compressor/count_sketch.py",
+    "simluation/lspoffload/compressor/svd.py",
+    "simluation/lspoffload/optim/__init__.py",
+    "simluation/lspoffload/optim/adamw.py",
+    "simluation/lspoffload/optim/dummy.py",
+    "simluation/lspoffload/optim/lsp_optimizer.py",
+    "simluation/lspoffload/utils/benchmark_compressor.py",
+    "simluation/pyproject.toml",
+    "state.py",
+    "utils.py"
+  ],
+  "training_executed": false,
+  "extension_compiled": false,
+  "gpu_checks_executed": false
+}

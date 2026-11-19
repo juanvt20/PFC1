@@ -1,0 +1,20 @@
+[
+  {
+    "file": "LSP-OFFLOAD.pdf",
+    "sha256": "f1bda470198ddfe30fcb68d0ae8b0d9881db263a0b45ada370800554195b55db",
+    "pages": 13,
+    "pymupdf": "1.26.7"
+  },
+  {
+    "file": "PFC (1).pdf",
+    "sha256": "a02537c6d6584334ded8489cd9bea1248ae8a77f99978a035f45854f2654be3b",
+    "pages": 9,
+    "pymupdf": "1.26.7"
+  },
+  {
+    "file": "STRONGHOLD.pdf",
+    "sha256": "87cdc3327797b82dcba0e977fe02168180ad31f1a3516d645acdeb618a0d1a13",
+    "pages": 15,
+    "pymupdf": "1.26.7"
+  }
+]

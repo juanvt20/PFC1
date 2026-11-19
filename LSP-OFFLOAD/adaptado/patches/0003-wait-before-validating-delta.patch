@@ -1,0 +1,13 @@
+--- a/para_offload_modules.py
++++ b/para_offload_modules.py
+@@ -126,9 +126,9 @@
+             with torch.no_grad():
+                 t = time.perf_counter()
+                 event, delta = ctx.pop()
+-                assert torch.isnan(delta).sum().item() == 0
+                 torch.cuda.current_stream().wait_event(event)
+                 delta.record_stream(torch.cuda.current_stream())
++                assert torch.isfinite(delta).all().item()
+                 if state == State.PROFILE: ctx.upload_wait.append(time.perf_counter() - t)
+                 weight.add_(decompressor(delta.to(weight.dtype)))
+                 del delta

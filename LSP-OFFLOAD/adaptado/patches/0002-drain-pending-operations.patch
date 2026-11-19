@@ -1,0 +1,117 @@
+--- a/llm_finetuning.py
++++ b/llm_finetuning.py
+@@ -194,7 +194,7 @@
+                 break
+             is_timeout = (time.time() - self.train_start_time) > (self.timeout * 3600)
+             if i != 0 and i % self.eval_freq == 0 or is_timeout:
+-                self.scheduler.clear()
++                self.scheduler.drain()
+                 self.model.eval()
+                 is_better = False
+                 eval_start_time = time.time()
+@@ -219,6 +219,7 @@
+                     self.eval_losses.append((self.epoch, i, time.time() - self.start_time, score))
+                 if self.save_dir is not None:
+                     if is_better:
++                        self.scheduler.drain()
+                         torch.save(self.model.state_dict(), f'{self.save_dir}/model.pth')
+                     pd.DataFrame(self.losses, columns = ['epoch', 'iter', 'time', 'loss']).to_csv(f'{self.save_dir}/losses.csv')
+                     pd.DataFrame(self.eval_losses, columns = ['epoch', 'iter', 'time', self.eval_metric]).to_csv(f'{self.save_dir}/eval_losses.csv')
+@@ -232,6 +233,7 @@
+                 i % compress_profile == 0 and\
+                 self.gradient_compressor.need_profile():
+                 profile_start_t = time.time()
++                self.scheduler.drain()
+                 for module in self.global_state['offload_modules']:
+                     module.to('cpu')
+                 self.global_state['state'] = State.RUNNING_PROFILE
+--- a/para_offload_modules.py
++++ b/para_offload_modules.py
+@@ -108,6 +108,7 @@
+                     t = time.perf_counter()
+                     assert torch.isnan(device_buffer).sum().item() == 0
+                     pinned_buffer.copy_(device_buffer, non_blocking=state != State.PROFILE_COMM)
++                    device_buffer.record_stream(ctx.d2hStream)
+                     
+                     if state == State.PROFILE_COMM:
+                         # print('d2h_comm', device_buffer.numel() * device_buffer.element_size(), time.perf_counter() - t)
+@@ -127,6 +128,7 @@
+                 event, delta = ctx.pop()
+                 assert torch.isnan(delta).sum().item() == 0
+                 torch.cuda.current_stream().wait_event(event)
++                delta.record_stream(torch.cuda.current_stream())
+                 if state == State.PROFILE: ctx.upload_wait.append(time.perf_counter() - t)
+                 weight.add_(decompressor(delta.to(weight.dtype)))
+                 del delta
+@@ -136,10 +138,12 @@
+ class LoRaOffloadMatmulFunction(torch.autograd.Function):
+     @staticmethod
+     def forward(ctx, input, weight, optim):
++        if optim is not None:
++            ctx.optim = optim
++            # Pending updates must precede the matmul which consumes this weight.
++            ctx.optim.forward(input)
+         output = input @ weight
+         if optim is not None:
+-            ctx.optim = optim
+-            ctx.optim.forward(input)
+             ctx.save_for_backward(weight)
+         return output
+ 
+@@ -425,12 +429,37 @@
+     def schedule_fwd(self, module: ParallelOffloadAdamMMOptim, func):
+         module.fwd_end_hooks.append(func)
+     
++    def pending_work(self):
++        return [dict(module=m.idx, hooks=sum(len(getattr(m, name)) for name in
++                    ('fwd_hooks', 'fwd_end_hooks', 'bwd_hooks', 'bwd_end_hooks')),
++                     buffers=len(m.ctx.stack)) for m in self.modules
++                if m.fwd_hooks or m.fwd_end_hooks or m.bwd_hooks or m.bwd_end_hooks or m.ctx.stack]
++
+     def clear(self):
+-        for module in self.modules:
+-            module.fwd_hooks.clear()
+-            module.fwd_end_hooks.clear()
+-            module.bwd_hooks.clear()
+-            module.bwd_end_hooks.clear()
++        pending = self.pending_work()
++        if pending or getattr(self, '_drain_failed', False):
++            raise RuntimeError(f'Cannot clear unfinished scheduler work: {pending}')
++
++    def drain(self):
++        # A boundary after a complete backward, not an extra training iteration.
++        if getattr(self, '_drain_failed', False):
++            raise RuntimeError('Cannot retry a partially failed drain')
++        if any(m.bwd_hooks or m.bwd_end_hooks for m in self.modules):
++            raise RuntimeError('Cannot drain before backward callbacks have completed')
++        try:
++            # Same layer and hook order as the next forward, without computing it.
++            for module in self.modules:
++                for name in ('fwd_hooks', 'fwd_end_hooks'):
++                    hooks = getattr(module, name)
++                    while hooks:
++                        hook = hooks.pop(0)
++                        hook()
++            for device in {m.compute_device for m in self.modules}:
++                torch.cuda.synchronize(device)
++            self.clear()
++        except BaseException:
++            self._drain_failed = True
++            raise
+     
+     def schedule_bwd(self, module: ParallelOffloadAdamMMOptim, d2h_comm_func, process_func, h2d_comm_func, update_func):
+         if self.zero:
+@@ -542,8 +571,11 @@
+     def __enter__(self):
+         return self.scheduler
+     
+-    def __exit__(self, *args): 
+-        self.scheduler.clear()
++    def __exit__(self, exc_type, exc_value, traceback):
++        # Failed backward/OOM is not a valid boundary: retain the failed work.
++        if exc_type is None or (exc_type is SystemExit and exc_value.code in (None, 0)):
++            self.scheduler.drain()
++        return False
+ 
+ class Adam:
+     def __init__(self,

@@ -1,0 +1,2761 @@
+{
+  "status": "medium_pilots_passed_short_comparison_ready",
+  "upstream_commit": "d9dc92a32b7e4829116ba6abec17c280dfb548a4",
+  "patch": "adaptado/patches/0001-preserve-transported-moments.patch",
+  "algorithm_accepted": false,
+  "training_attempted": true,
+  "oom_observed": true,
+  "fallback_to_medium": true,
+  "performance_measured": false,
+  "tests": {
+    "moments_original": {
+      "run_id": "moment-original-captured-inputs",
+      "report_sha256": "dc1f56b7bd66266b0dfe979a05e6539fec52bd9ac56e67c687e75e2061a30710",
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "tools/validate_moment_transport.py",
+          "--source",
+          "original",
+          "--run-id",
+          "moment-original-captured-inputs"
+        ],
+        "exit_code": 1,
+        "started_utc": "2026-11-14T02:13:58.3210216Z",
+        "ended_utc": "2026-11-14T02:14:04.3710315Z",
+        "test_sha256": "C09C557577B80F5A18A5C9CA8B4AB16F7C08F8516B69DE603C081E4DD76971F6",
+        "log": "logs/moment-original-captured-inputs.log"
+      },
+      "diagnostics": {
+        "source": "original",
+        "paper": "p.5 Algorithm 1 lines 8-9",
+        "scope": "full_tensor_moment_transport_not_training",
+        "reference_inputs": "actual dense sketches returned during transport; no resampling or duplicate-index correction",
+        "cases": [
+          {
+            "device": "cpu",
+            "weight_dtype": "torch.float32",
+            "initial": {
+              "m_zero": true,
+              "v_zero": true,
+              "step_zero": true,
+              "device": "cpu",
+              "buffer_pinned": true,
+              "passed": true
+            },
+            "recalibrations": [
+              {
+                "recalibration": 1,
+                "step_before": 7,
+                "step_after": 7,
+                "state_device": "cpu",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 5.592495389006302e-08,
+                  "max_scaled_error": 0.010457331504941476,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 3.4876548582474243e-06,
+                  "max_scaled_error": 0.005379706146668929,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 0.8295316063323636,
+                  "max_scaled_error": 44620.946758627804,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 35.693588583878345,
+                  "max_scaled_error": 49860.310178503525,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": false,
+                "buffer_preserves_v": false,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003406486428794478,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.1652900866465643e-11,
+                    "max_scaled_error": 5.826397995649006e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 8.731149137020111e-11,
+                    "max_scaled_error": 4.350953497092039e-05,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": false
+              },
+              {
+                "recalibration": 2,
+                "step_before": 8,
+                "step_after": 8,
+                "state_device": "cpu",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.9301077948511167e-10,
+                  "max_scaled_error": 0.00014493817541012084,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.2793789643214299e-13,
+                  "max_scaled_error": 6.396737330486267e-08,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 0.0019857496090990743,
+                  "max_scaled_error": 973.5426844977112,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.4620538994615388e-06,
+                  "max_scaled_error": 1.2309966419299447,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": false,
+                "buffer_preserves_v": false,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003406486428794478,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.1652900866465643e-11,
+                    "max_scaled_error": 5.826397995649006e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 2.6193447411060333e-10,
+                    "max_scaled_error": 0.0001305157221494213,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": false
+              }
+            ],
+            "passed": false
+          },
+          {
+            "device": "cpu",
+            "weight_dtype": "torch.bfloat16",
+            "initial": {
+              "m_zero": true,
+              "v_zero": true,
+              "step_zero": true,
+              "device": "cpu",
+              "buffer_pinned": true,
+              "passed": true
+            },
+            "recalibrations": [
+              {
+                "recalibration": 1,
+                "step_before": 7,
+                "step_after": 7,
+                "state_device": "cpu",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.3023558054214845e-07,
+                  "max_scaled_error": 0.008659494819799008,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.47823337570685e-06,
+                  "max_scaled_error": 0.007374809300946956,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 0.7217494623891456,
+                  "max_scaled_error": 43915.42041845326,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 26.576010799781987,
+                  "max_scaled_error": 49812.56567792209,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": false,
+                "buffer_preserves_v": false,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003406486428794478,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.1652900866465643e-11,
+                    "max_scaled_error": 5.826397995649006e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 8.731149137020111e-11,
+                    "max_scaled_error": 4.350953497092039e-05,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": false
+              },
+              {
+                "recalibration": 2,
+                "step_before": 8,
+                "step_after": 8,
+                "state_device": "cpu",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.507026253262268e-10,
+                  "max_scaled_error": 0.00012493709086048788,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 5.129240336993265e-14,
+                  "max_scaled_error": 2.56460197263383e-08,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 0.0030669528249246776,
+                  "max_scaled_error": 1487.8449109358924,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 8.964707105150508e-07,
+                  "max_scaled_error": 0.44823133699487394,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": false,
+                "buffer_preserves_v": false,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003406486428794478,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.1652900866465643e-11,
+                    "max_scaled_error": 5.826397995649006e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 2.6193447411060333e-10,
+                    "max_scaled_error": 0.0001305157221494213,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": false
+              }
+            ],
+            "passed": false
+          },
+          {
+            "device": "cuda:0",
+            "weight_dtype": "torch.float32",
+            "initial": {
+              "m_zero": true,
+              "v_zero": true,
+              "step_zero": true,
+              "device": "cuda:0",
+              "buffer_pinned": null,
+              "passed": true
+            },
+            "recalibrations": [
+              {
+                "recalibration": 1,
+                "step_before": 7,
+                "step_after": 7,
+                "state_device": "cuda:0",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 8.061564082950667e-08,
+                  "max_scaled_error": 0.01394309989414381,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.7732835121696553e-06,
+                  "max_scaled_error": 0.006346494061832487,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 0.8979820735678578,
+                  "max_scaled_error": 44989.88996653552,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 42.86011782455304,
+                  "max_scaled_error": 49883.61298215196,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": false,
+                "buffer_preserves_v": false,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003406486428794478,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.1652900866465643e-11,
+                    "max_scaled_error": 5.826397995649006e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 3.4924596548080444e-10,
+                    "max_scaled_error": 0.00017379895112662054,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": false
+              },
+              {
+                "recalibration": 2,
+                "step_before": 8,
+                "step_after": 8,
+                "state_device": "cuda:0",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 3.1354350452789115e-10,
+                  "max_scaled_error": 0.00015572034301589816,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.1965102921377758e-13,
+                  "max_scaled_error": 5.982403675940206e-08,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 0.0019304650869241254,
+                  "max_scaled_error": 946.9519663615123,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.47032391456951e-06,
+                  "max_scaled_error": 1.2351314455372795,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": false,
+                "buffer_preserves_v": false,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003406486428794478,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.1652900866465643e-11,
+                    "max_scaled_error": 5.826397995649006e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003475882553046167,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": false
+              }
+            ],
+            "passed": false
+          },
+          {
+            "device": "cuda:0",
+            "weight_dtype": "torch.bfloat16",
+            "initial": {
+              "m_zero": true,
+              "v_zero": true,
+              "step_zero": true,
+              "device": "cuda:0",
+              "buffer_pinned": null,
+              "passed": true
+            },
+            "recalibrations": [
+              {
+                "recalibration": 1,
+                "step_before": 7,
+                "step_after": 7,
+                "state_device": "cuda:0",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.3023558054214845e-07,
+                  "max_scaled_error": 0.008659494819799008,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.47823337570685e-06,
+                  "max_scaled_error": 0.007374809300946956,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 0.7217494623891456,
+                  "max_scaled_error": 43915.42041845326,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 26.576010799781987,
+                  "max_scaled_error": 49812.56567792209,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": false,
+                "buffer_preserves_v": false,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003406486428794478,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.1652900866465643e-11,
+                    "max_scaled_error": 5.826397995649006e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 3.4924596548080444e-10,
+                    "max_scaled_error": 0.00017379895112662054,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": false
+              },
+              {
+                "recalibration": 2,
+                "step_before": 8,
+                "step_after": 8,
+                "state_device": "cuda:0",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.507026253262268e-10,
+                  "max_scaled_error": 0.00012493709086048788,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 8.999318774635879e-14,
+                  "max_scaled_error": 4.4996190495534784e-08,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 0.0030669528249246776,
+                  "max_scaled_error": 1487.8449109358924,
+                  "all_elements_pass": false,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 8.964706571064711e-07,
+                  "max_scaled_error": 0.44823131029106283,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": false,
+                "buffer_preserves_v": false,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003406486428794478,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.1652900866465643e-11,
+                    "max_scaled_error": 5.826397995649006e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.0003475882553046167,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": false
+              }
+            ],
+            "passed": false
+          }
+        ],
+        "passed": false
+      }
+    },
+    "moments_adapted": {
+      "run_id": "moment-adapted-captured-inputs",
+      "report_sha256": "04e02624b17bb47d611d01cfa4ef8f563a881188f576d8944735c2eb0109c4a1",
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "tools/validate_moment_transport.py",
+          "--source",
+          "adaptado",
+          "--run-id",
+          "moment-adapted-captured-inputs"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-14T02:12:25.9628261Z",
+        "ended_utc": "2026-11-14T02:12:32.5901329Z",
+        "test_sha256": "C09C557577B80F5A18A5C9CA8B4AB16F7C08F8516B69DE603C081E4DD76971F6",
+        "log": "logs/moment-adapted-captured-inputs.log"
+      },
+      "diagnostics": {
+        "source": "adaptado",
+        "paper": "p.5 Algorithm 1 lines 8-9",
+        "scope": "full_tensor_moment_transport_not_training",
+        "reference_inputs": "actual dense sketches returned during transport; no resampling or duplicate-index correction",
+        "cases": [
+          {
+            "device": "cpu",
+            "weight_dtype": "torch.float32",
+            "initial": {
+              "m_zero": true,
+              "v_zero": true,
+              "step_zero": true,
+              "device": "cpu",
+              "buffer_pinned": true,
+              "passed": true
+            },
+            "recalibrations": [
+              {
+                "recalibration": 1,
+                "step_before": 7,
+                "step_after": 7,
+                "state_device": "cpu",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 5.592495389006302e-08,
+                  "max_scaled_error": 0.010457331504941476,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 3.4876548582474243e-06,
+                  "max_scaled_error": 0.005379706146668929,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 5.592495389006302e-08,
+                  "max_scaled_error": 0.010457331504941476,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 3.4876548582474243e-06,
+                  "max_scaled_error": 0.005379706146668929,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": true,
+                "buffer_preserves_v": true,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 9.313225746154785e-10,
+                    "max_scaled_error": 0.00044038308522954746,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 7.275957614183426e-12,
+                    "max_scaled_error": 3.634020794469158e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 5.966285243630409e-10,
+                    "max_scaled_error": 0.00029806871612237746,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": true
+              },
+              {
+                "recalibration": 2,
+                "step_before": 8,
+                "step_after": 8,
+                "state_device": "cpu",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.06023659588395e-08,
+                  "max_scaled_error": 0.013390626742732222,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.250844435840008e-06,
+                  "max_scaled_error": 0.006488436625296334,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.06023659588395e-08,
+                  "max_scaled_error": 0.013390626742732222,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.250844435840008e-06,
+                  "max_scaled_error": 0.006488436625296334,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": true,
+                "buffer_preserves_v": true,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.4901161193847656e-08,
+                    "max_scaled_error": 0.00304704749811988,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 0.0,
+                    "max_scaled_error": 0.0,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 6.984919309616089e-10,
+                    "max_scaled_error": 0.00034894370394866303,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": true
+              }
+            ],
+            "passed": true
+          },
+          {
+            "device": "cpu",
+            "weight_dtype": "torch.bfloat16",
+            "initial": {
+              "m_zero": true,
+              "v_zero": true,
+              "step_zero": true,
+              "device": "cpu",
+              "buffer_pinned": true,
+              "passed": true
+            },
+            "recalibrations": [
+              {
+                "recalibration": 1,
+                "step_before": 7,
+                "step_after": 7,
+                "state_device": "cpu",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.3023558054214845e-07,
+                  "max_scaled_error": 0.008659494819799008,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.47823337570685e-06,
+                  "max_scaled_error": 0.007374809300946956,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.3023558054214845e-07,
+                  "max_scaled_error": 0.008659494819799008,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.47823337570685e-06,
+                  "max_scaled_error": 0.007374809300946956,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": true,
+                "buffer_preserves_v": true,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.862645149230957e-09,
+                    "max_scaled_error": 0.0007603967465530972,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 7.275957614183426e-12,
+                    "max_scaled_error": 3.6336332595348313e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 7.785274647176266e-10,
+                    "max_scaled_error": 0.00038884097127142716,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": true
+              },
+              {
+                "recalibration": 2,
+                "step_before": 8,
+                "step_after": 8,
+                "state_device": "cpu",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.78688976130104e-08,
+                  "max_scaled_error": 0.014633598865384444,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.0125947699511926e-06,
+                  "max_scaled_error": 0.0070549187757223426,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.78688976130104e-08,
+                  "max_scaled_error": 0.014633598865384444,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.0125947699511926e-06,
+                  "max_scaled_error": 0.0070549187757223426,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": true,
+                "buffer_preserves_v": true,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.4901161193847656e-08,
+                    "max_scaled_error": 0.00304389885357881,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 0.0,
+                    "max_scaled_error": 0.0,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 5.820766091346741e-10,
+                    "max_scaled_error": 0.0002908256585226794,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": true
+              }
+            ],
+            "passed": true
+          },
+          {
+            "device": "cuda:0",
+            "weight_dtype": "torch.float32",
+            "initial": {
+              "m_zero": true,
+              "v_zero": true,
+              "step_zero": true,
+              "device": "cuda:0",
+              "buffer_pinned": null,
+              "passed": true
+            },
+            "recalibrations": [
+              {
+                "recalibration": 1,
+                "step_before": 7,
+                "step_after": 7,
+                "state_device": "cuda:0",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.647523842495673e-08,
+                  "max_scaled_error": 0.011373225438263709,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.6163995155693556e-06,
+                  "max_scaled_error": 0.006284628628894623,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.647523842495673e-08,
+                  "max_scaled_error": 0.011373225438263709,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.6163995155693556e-06,
+                  "max_scaled_error": 0.006284628628894623,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": true,
+                "buffer_preserves_v": true,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 3.725290298461914e-09,
+                    "max_scaled_error": 0.0013826492004446623,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 7.275957614183426e-12,
+                    "max_scaled_error": 3.6341281049178885e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 7.275957614183426e-10,
+                    "max_scaled_error": 0.000363439013392157,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": true
+              },
+              {
+                "recalibration": 2,
+                "step_before": 8,
+                "step_after": 8,
+                "state_device": "cuda:0",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.2225784024044728e-07,
+                  "max_scaled_error": 0.013292084239628361,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.1045884846794252e-05,
+                  "max_scaled_error": 0.008689733568934122,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.2225784024044728e-07,
+                  "max_scaled_error": 0.013292084239628361,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.1045884846794252e-05,
+                  "max_scaled_error": 0.008689733568934122,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": true,
+                "buffer_preserves_v": true,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 3.725290298461914e-09,
+                    "max_scaled_error": 0.0011761173213346535,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 0.0,
+                    "max_scaled_error": 0.0,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 4.94765117764473e-10,
+                    "max_scaled_error": 0.00024722855141072995,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": true
+              }
+            ],
+            "passed": true
+          },
+          {
+            "device": "cuda:0",
+            "weight_dtype": "torch.bfloat16",
+            "initial": {
+              "m_zero": true,
+              "v_zero": true,
+              "step_zero": true,
+              "device": "cuda:0",
+              "buffer_pinned": null,
+              "passed": true
+            },
+            "recalibrations": [
+              {
+                "recalibration": 1,
+                "step_before": 7,
+                "step_after": 7,
+                "state_device": "cuda:0",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.3023558054214845e-07,
+                  "max_scaled_error": 0.008659494819799008,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.47823337570685e-06,
+                  "max_scaled_error": 0.007374809300946956,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.3023558054214845e-07,
+                  "max_scaled_error": 0.008659494819799008,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 1.47823337570685e-06,
+                  "max_scaled_error": 0.007374809300946956,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": true,
+                "buffer_preserves_v": true,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 3.725290298461914e-09,
+                    "max_scaled_error": 0.0013597505081904353,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 7.275957614183426e-12,
+                    "max_scaled_error": 3.6336332595348313e-06,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 7.8580342233181e-10,
+                    "max_scaled_error": 0.00039247500503063236,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": true
+              },
+              {
+                "recalibration": 2,
+                "step_before": 8,
+                "step_after": 8,
+                "state_device": "cuda:0",
+                "projector_changed": true,
+                "pre_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.787628803461843e-08,
+                  "max_scaled_error": 0.014628982546032497,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "pre_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.0125947699511926e-06,
+                  "max_scaled_error": 0.0070549187757223426,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_m": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 6.787628803461843e-08,
+                  "max_scaled_error": 0.014628982546032497,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "post_v": {
+                  "shape": [
+                    8,
+                    8
+                  ],
+                  "max_abs_error": 2.0125947699511926e-06,
+                  "max_scaled_error": 0.0070549187757223426,
+                  "all_elements_pass": true,
+                  "rtol": 2e-05,
+                  "atol": 2e-06
+                },
+                "buffer_preserves_m": true,
+                "buffer_preserves_v": true,
+                "next_step": {
+                  "m": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 1.4901161193847656e-08,
+                    "max_scaled_error": 0.00304389885357881,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "v": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 0.0,
+                    "max_scaled_error": 0.0,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "delta": {
+                    "shape": [
+                      8,
+                      8
+                    ],
+                    "max_abs_error": 5.893525667488575e-10,
+                    "max_scaled_error": 0.0002944609834075981,
+                    "all_elements_pass": true,
+                    "rtol": 2e-05,
+                    "atol": 2e-06
+                  },
+                  "counter_ok": true
+                },
+                "passed": true
+              }
+            ],
+            "passed": true
+          }
+        ],
+        "passed": true
+      }
+    },
+    "scheduler": {
+      "run_id": "scheduler-boundaries-before-fix",
+      "report_sha256": "2047213072ae77b0a4597a47bf4810aa0970dc1d7459d54d5fce7f0ce8954379",
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "tools/validate_scheduler_boundaries.py",
+          "--source",
+          "adaptado",
+          "--run-id",
+          "scheduler-boundaries-before-fix"
+        ],
+        "exit_code": 1,
+        "started_utc": "2026-11-14T02:15:07.5377935Z",
+        "ended_utc": "2026-11-14T02:15:11.5942667Z",
+        "test_sha256": "66A75CC9EDA0167AB1BEBC8C03B16A921F92BC96EBCD9819D1CA05AEBB6EE7A6",
+        "log": "logs/scheduler-boundaries-before-fix.log"
+      },
+      "diagnostics": {
+        "source": "adaptado",
+        "scope": "two_layer_actual_cpu_adam_no_model_training",
+        "cases": [
+          {
+            "route": "serial_control",
+            "boundary": "evaluation",
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 0,
+              "fcfs_process_delay": 0,
+              "fcfs_h2d_delay": 0,
+              "fcfs_upd_delay": 0,
+              "lcfs_d2h_delay": 0,
+              "lcfs_process_delay": 0,
+              "lcfs_h2d_delay": 0
+            },
+            "cpu_optimizer": "unchanged para_offload_modules.Adam, eps=1e-4",
+            "loss": 1.3303978443145752,
+            "loss_finite": true,
+            "evaluation_loss": 1.3139848709106445,
+            "after_backward": {
+              "adam_steps": [
+                1,
+                1
+              ],
+              "pending_hooks": [
+                0,
+                0
+              ],
+              "context_stack": [
+                0,
+                0
+              ],
+              "weight_max_change": [
+                0.0009979382157325745,
+                0.0009976625442504883
+              ]
+            },
+            "after_boundary": {
+              "adam_steps": [
+                1,
+                1
+              ],
+              "pending_hooks": [
+                0,
+                0
+              ],
+              "context_stack": [
+                0,
+                0
+              ],
+              "weight_max_change": [
+                0.0009979382157325745,
+                0.0009976625442504883
+              ]
+            },
+            "expected_adam_steps": [
+              1,
+              1
+            ],
+            "passed": true
+          },
+          {
+            "route": "serial_control",
+            "boundary": "exit",
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 0,
+              "fcfs_process_delay": 0,
+              "fcfs_h2d_delay": 0,
+              "fcfs_upd_delay": 0,
+              "lcfs_d2h_delay": 0,
+              "lcfs_process_delay": 0,
+              "lcfs_h2d_delay": 0
+            },
+            "cpu_optimizer": "unchanged para_offload_modules.Adam, eps=1e-4",
+            "loss": 1.3303978443145752,
+            "loss_finite": true,
+            "evaluation_loss": null,
+            "after_backward": {
+              "adam_steps": [
+                1,
+                1
+              ],
+              "pending_hooks": [
+                0,
+                0
+              ],
+              "context_stack": [
+                0,
+                0
+              ],
+              "weight_max_change": [
+                0.0009979382157325745,
+                0.0009976625442504883
+              ]
+            },
+            "after_boundary": {
+              "adam_steps": [
+                1,
+                1
+              ],
+              "pending_hooks": [
+                0,
+                0
+              ],
+              "context_stack": [
+                0,
+                0
+              ],
+              "weight_max_change": [
+                0.0009979382157325745,
+                0.0009976625442504883
+              ]
+            },
+            "expected_adam_steps": [
+              1,
+              1
+            ],
+            "passed": true
+          },
+          {
+            "route": "zero",
+            "boundary": "evaluation",
+            "scheduler": {
+              "zero": true,
+              "fcfs_point": 0,
+              "fcfs_process_delay": 0,
+              "fcfs_h2d_delay": 0,
+              "fcfs_upd_delay": 0,
+              "lcfs_d2h_delay": 0,
+              "lcfs_process_delay": 0,
+              "lcfs_h2d_delay": 0
+            },
+            "cpu_optimizer": "unchanged para_offload_modules.Adam, eps=1e-4",
+            "loss": 1.3303978443145752,
+            "loss_finite": true,
+            "evaluation_loss": 1.3303978443145752,
+            "after_backward": {
+              "adam_steps": [
+                0,
+                0
+              ],
+              "pending_hooks": [
+                6,
+                0
+              ],
+              "context_stack": [
+                1,
+                1
+              ],
+              "weight_max_change": [
+                0.0,
+                0.0
+              ]
+            },
+            "after_boundary": {
+              "adam_steps": [
+                0,
+                0
+              ],
+              "pending_hooks": [
+                0,
+                0
+              ],
+              "context_stack": [
+                1,
+                1
+              ],
+              "weight_max_change": [
+                0.0,
+                0.0
+              ]
+            },
+            "expected_adam_steps": [
+              1,
+              1
+            ],
+            "passed": false
+          },
+          {
+            "route": "zero",
+            "boundary": "exit",
+            "scheduler": {
+              "zero": true,
+              "fcfs_point": 0,
+              "fcfs_process_delay": 0,
+              "fcfs_h2d_delay": 0,
+              "fcfs_upd_delay": 0,
+              "lcfs_d2h_delay": 0,
+              "lcfs_process_delay": 0,
+              "lcfs_h2d_delay": 0
+            },
+            "cpu_optimizer": "unchanged para_offload_modules.Adam, eps=1e-4",
+            "loss": 1.3303978443145752,
+            "loss_finite": true,
+            "evaluation_loss": null,
+            "after_backward": {
+              "adam_steps": [
+                0,
+                0
+              ],
+              "pending_hooks": [
+                6,
+                0
+              ],
+              "context_stack": [
+                1,
+                1
+              ],
+              "weight_max_change": [
+                0.0,
+                0.0
+              ]
+            },
+            "after_boundary": {
+              "adam_steps": [
+                0,
+                0
+              ],
+              "pending_hooks": [
+                0,
+                0
+              ],
+              "context_stack": [
+                1,
+                1
+              ],
+              "weight_max_change": [
+                0.0,
+                0.0
+              ]
+            },
+            "expected_adam_steps": [
+              1,
+              1
+            ],
+            "passed": false
+          },
+          {
+            "route": "lsp_layerwise",
+            "boundary": "evaluation",
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 1,
+              "fcfs_process_delay": 0,
+              "fcfs_h2d_delay": 0,
+              "fcfs_upd_delay": 0,
+              "lcfs_d2h_delay": 1,
+              "lcfs_process_delay": 0,
+              "lcfs_h2d_delay": 0
+            },
+            "cpu_optimizer": "unchanged para_offload_modules.Adam, eps=1e-4",
+            "loss": 1.1775224208831787,
+            "loss_finite": true,
+            "evaluation_loss": 1.174552083015442,
+            "after_backward": {
+              "adam_steps": [
+                0,
+                1
+              ],
+              "pending_hooks": [
+                3,
+                0
+              ],
+              "context_stack": [
+                1,
+                0
+              ],
+              "weight_max_change": [
+                0.0,
+                0.006543651223182678
+              ]
+            },
+            "after_boundary": {
+              "adam_steps": [
+                0,
+                1
+              ],
+              "pending_hooks": [
+                0,
+                0
+              ],
+              "context_stack": [
+                1,
+                0
+              ],
+              "weight_max_change": [
+                0.0,
+                0.006543651223182678
+              ]
+            },
+            "expected_adam_steps": [
+              1,
+              1
+            ],
+            "passed": false
+          },
+          {
+            "route": "lsp_layerwise",
+            "boundary": "exit",
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 1,
+              "fcfs_process_delay": 0,
+              "fcfs_h2d_delay": 0,
+              "fcfs_upd_delay": 0,
+              "lcfs_d2h_delay": 1,
+              "lcfs_process_delay": 0,
+              "lcfs_h2d_delay": 0
+            },
+            "cpu_optimizer": "unchanged para_offload_modules.Adam, eps=1e-4",
+            "loss": 1.1775224208831787,
+            "loss_finite": true,
+            "evaluation_loss": null,
+            "after_backward": {
+              "adam_steps": [
+                0,
+                1
+              ],
+              "pending_hooks": [
+                3,
+                0
+              ],
+              "context_stack": [
+                1,
+                0
+              ],
+              "weight_max_change": [
+                0.0,
+                0.006543651223182678
+              ]
+            },
+            "after_boundary": {
+              "adam_steps": [
+                0,
+                1
+              ],
+              "pending_hooks": [
+                0,
+                0
+              ],
+              "context_stack": [
+                1,
+                0
+              ],
+              "weight_max_change": [
+                0.0,
+                0.006543651223182678
+              ]
+            },
+            "expected_adam_steps": [
+              1,
+              1
+            ],
+            "passed": false
+          }
+        ],
+        "passed": false
+      }
+    },
+    "scheduler_equivalence": {
+      "run_id": "scheduler-drain-multistep-v3",
+      "report_sha256": "638cad8c9d5fdcd3ebf1807b26cf69f86b033cec29a004f754402ee69fdf040f",
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "tools/validate_scheduler_equivalence.py",
+          "--source",
+          "adaptado",
+          "--run-id",
+          "scheduler-drain-multistep-v3"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-15T03:23:11.6060882Z",
+        "ended_utc": "2026-11-15T03:23:19.0901745Z",
+        "test_sha256": "60CF5E6AB4501A5169CFD08302C1CCEB961EFD25580346565D6FD0FFF03D2201",
+        "log": "logs/scheduler-drain-multistep-v3.log"
+      },
+      "report": {
+        "source": "adaptado",
+        "scope": "12_steps_6_layers_cpu_adam_same_inputs_weights_projectors",
+        "rtol": 5e-05,
+        "atol": 2e-06,
+        "diagnostic_projectors": "d8/r1 Gaussian with original sampling; r1 avoids duplicate-index ambiguity",
+        "passed": true,
+        "cases": [
+          {
+            "route": "zero",
+            "checkpointing": false,
+            "dtype": "torch.float32",
+            "passed": true,
+            "scheduler": {
+              "zero": true
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "zero",
+            "checkpointing": false,
+            "dtype": "torch.bfloat16",
+            "passed": true,
+            "scheduler": {
+              "zero": true
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "zero",
+            "checkpointing": true,
+            "dtype": "torch.float32",
+            "passed": true,
+            "scheduler": {
+              "zero": true
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "zero",
+            "checkpointing": true,
+            "dtype": "torch.bfloat16",
+            "passed": true,
+            "scheduler": {
+              "zero": true
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "lsp",
+            "checkpointing": false,
+            "dtype": "torch.float32",
+            "passed": true,
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 3,
+              "fcfs_process_delay": 1,
+              "fcfs_h2d_delay": 1,
+              "fcfs_upd_delay": 1,
+              "lcfs_d2h_delay": 99,
+              "lcfs_process_delay": 1,
+              "lcfs_h2d_delay": 0
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "recalibration_does_not_increment_steps",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "lsp",
+            "checkpointing": false,
+            "dtype": "torch.bfloat16",
+            "passed": true,
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 3,
+              "fcfs_process_delay": 1,
+              "fcfs_h2d_delay": 1,
+              "fcfs_upd_delay": 1,
+              "lcfs_d2h_delay": 99,
+              "lcfs_process_delay": 1,
+              "lcfs_h2d_delay": 0
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "recalibration_does_not_increment_steps",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "lsp",
+            "checkpointing": true,
+            "dtype": "torch.float32",
+            "passed": true,
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 3,
+              "fcfs_process_delay": 1,
+              "fcfs_h2d_delay": 1,
+              "fcfs_upd_delay": 1,
+              "lcfs_d2h_delay": 99,
+              "lcfs_process_delay": 1,
+              "lcfs_h2d_delay": 0
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "recalibration_does_not_increment_steps",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          },
+          {
+            "route": "lsp",
+            "checkpointing": true,
+            "dtype": "torch.bfloat16",
+            "passed": true,
+            "scheduler": {
+              "zero": false,
+              "fcfs_point": 3,
+              "fcfs_process_delay": 1,
+              "fcfs_h2d_delay": 1,
+              "fcfs_upd_delay": 1,
+              "lcfs_d2h_delay": 99,
+              "lcfs_process_delay": 1,
+              "lcfs_h2d_delay": 0
+            },
+            "checks": [
+              {
+                "name": "clear_rejects_without_discard",
+                "passed": true
+              },
+              {
+                "name": "evaluation_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "evaluation_idempotent",
+                "passed": true
+              },
+              {
+                "name": "evaluation_no_update",
+                "passed": true
+              },
+              {
+                "name": "recalibration_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "recalibration_idempotent",
+                "passed": true
+              },
+              {
+                "name": "recalibration_does_not_increment_steps",
+                "passed": true
+              },
+              {
+                "name": "save_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "save_idempotent",
+                "passed": true
+              },
+              {
+                "name": "save_no_update",
+                "passed": true
+              },
+              {
+                "name": "exit_exactly_once",
+                "passed": true
+              },
+              {
+                "name": "exit_idempotent",
+                "passed": true
+              },
+              {
+                "name": "context_exit_idempotent",
+                "passed": true
+              }
+            ],
+            "tensor_errors": {
+              "max_abs": 0.0,
+              "max_scaled": 0.0
+            }
+          }
+        ]
+      }
+    },
+    "gpt2_checkpointing": {
+      "run_id": "scheduler-gpt2-checkpointing-v2",
+      "report_sha256": "5c564876885dd6c9ffe6ef2de11fb6dd7203fb59769d6caa97223d7b214fead2",
+      "command": {
+        "executable": "C:\\Users\\juan\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "argv": [
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network",
+          "none",
+          "--gpus",
+          "all",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD,target=/work",
+          "--mount",
+          "type=bind,source=C:\\PFC1\\LSP-OFFLOAD\\original\\upstream,target=/work/original/upstream,readonly",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "pfc-lsp-offload:torch271-cu128",
+          "python",
+          "tools/validate_gpt2_checkpointing.py",
+          "--source",
+          "adaptado",
+          "--run-id",
+          "scheduler-gpt2-checkpointing-v2"
+        ],
+        "exit_code": 0,
+        "started_utc": "2026-11-15T03:28:11.5932349Z",
+        "ended_utc": "2026-11-15T03:28:16.1485079Z",
+        "test_sha256": "645219D42644EDB728E34696A7F41DE7B3BF720D62CA3CC82291A7753FB4C319",
+        "log": "logs/scheduler-gpt2-checkpointing-v2.log"
+      },
+      "report": {
+        "scope": "tiny_random_GPT2_checkpointing_not_pretrained_pilot",
+        "cases": [
+          {
+            "passed": false,
+            "error": "Traceback (most recent call last):\n  File \"/work/tools/validate_gpt2_checkpointing.py\", line 61, in <module>\n    row=run(route,hook)\n        ^^^^^^^^^^^^^^^\n  File \"/work/tools/validate_gpt2_checkpointing.py\", line 47, in run\n    loss.backward()\n  File \"/opt/conda/lib/python3.11/site-packages/torch/_tensor.py\", line 648, in backward\n    torch.autograd.backward(\n  File \"/opt/conda/lib/python3.11/site-packages/torch/autograd/__init__.py\", line 353, in backward\n    _engine_run_backward(\n  File \"/opt/conda/lib/python3.11/site-packages/torch/autograd/graph.py\", line 824, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: element 0 of tensors does not require grad and does not have a grad_fn\n",
+            "route": "zero",
+            "input_grad_hook": false
+          },
+          {
+            "passed": true,
+            "modules": 8,
+            "adam_steps": [
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6
+            ],
+            "losses": [
+              4.84375,
+              4.84375,
+              4.875,
+              4.84375,
+              4.875,
+              4.875
+            ],
+            "embedding_weights_trainable": false,
+            "route": "zero",
+            "input_grad_hook": true
+          },
+          {
+            "passed": true,
+            "modules": 8,
+            "adam_steps": [
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6
+            ],
+            "losses": [
+              4.84375,
+              4.8125,
+              4.8125,
+              4.875,
+              4.875,
+              4.84375
+            ],
+            "embedding_weights_trainable": false,
+            "route": "lsp",
+            "input_grad_hook": true
+          }
+        ],
+        "passed": true
+      }
+    }
+  },
+  "patch_sha256": "000be9e6a421792589261caed883cfc3199131b392f6c49f2123bc134f97de42",
+  "image_identity_record": "sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006 [\"pfc-lsp-offload@sha256:d5f1daf0b2d5103e7fb66bb44405839c51d0302fb8d7630fd7ed5e64497ed006\"]",
+  "scope_note": "Two separately authorized patches; eight multi-step scheduler cases and GPT2 input-hook compatibility passed. Long training and convergence not validated.",
+  "scheduler_patch": {
+    "path": "adaptado/patches/0002-drain-pending-operations.patch",
+    "sha256": "966e7327cc5b49c9b32e49ff1040a3801d501944625740652c8db25fabbdd7ce",
+    "earlier_runs": {
+      "scheduler-drain-multistep-v1": "all boundaries exact-once but tensor equality failed; hooks ran after matmul",
+      "scheduler-drain-multistep-v2": "7 of 8 cases passed; LSP float32 W mismatch with equal M/V; added stream lifetime records",
+      "scheduler-gpt2-checkpointing": "test harness initially missed required use_lora/lora_rank arguments; fixed test, not upstream math"
+    }
+  },
+  "pilot_gate": "results/scheduler-v3-pilot-gate.json",
+  "upstream_byte_verification": {
+    "files": 99,
+    "byte_mismatches": [],
+    "object_mismatches": [],
+    "eol_only": [],
+    "git_diff_content_empty": true
+  }
+}
